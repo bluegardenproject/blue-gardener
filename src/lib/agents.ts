@@ -24,6 +24,8 @@ export interface AgentInfo {
   name: string;
   description: string;
   filename: string;
+  tags: string[];
+  category: string;
 }
 
 /**
@@ -32,19 +34,33 @@ export interface AgentInfo {
 function parseAgentFrontmatter(content: string): {
   name: string;
   description: string;
+  tags: string[];
+  category: string;
 } {
   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
   if (!frontmatterMatch) {
-    return { name: "", description: "" };
+    return { name: "", description: "", tags: [], category: "" };
   }
 
   const frontmatter = frontmatterMatch[1];
   const nameMatch = frontmatter.match(/^name:\s*(.+)$/m);
   const descMatch = frontmatter.match(/^description:\s*(.+)$/m);
+  const categoryMatch = frontmatter.match(/^category:\s*(.+)$/m);
+
+  // Parse tags array: tags: [tag1, tag2, tag3]
+  const tagsMatch = frontmatter.match(/^tags:\s*\[([^\]]*)\]$/m);
+  const tags = tagsMatch
+    ? tagsMatch[1]
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean)
+    : [];
 
   return {
     name: nameMatch ? nameMatch[1].trim() : "",
     description: descMatch ? descMatch[1].trim() : "",
+    tags,
+    category: categoryMatch ? categoryMatch[1].trim() : "",
   };
 }
 
@@ -60,11 +76,14 @@ export function getAvailableAgents(): AgentInfo[] {
   const files = fs.readdirSync(agentsDir).filter((f) => f.endsWith(".md"));
   return files.map((filename) => {
     const content = fs.readFileSync(path.join(agentsDir, filename), "utf-8");
-    const { name, description } = parseAgentFrontmatter(content);
+    const { name, description, tags, category } =
+      parseAgentFrontmatter(content);
     return {
       name: name || path.basename(filename, ".md"),
       description,
       filename,
+      tags,
+      category,
     };
   });
 }
@@ -178,4 +197,76 @@ export function syncAgents(): { synced: string[]; failed: string[] } {
   }
 
   return { synced, failed };
+}
+
+/**
+ * Find orphaned blue-* agent files that exist in project but aren't in manifest
+ */
+export function findOrphanedAgents(): AgentInfo[] {
+  const projectAgentsDir = getProjectAgentsDir();
+  if (!fs.existsSync(projectAgentsDir)) {
+    return [];
+  }
+
+  const manifest = readManifest();
+  const trackedNames = manifest ? Object.keys(manifest.agents) : [];
+  const availableAgents = getAvailableAgents();
+
+  // Find blue-* files in project that match our available agents but aren't tracked
+  const files = fs
+    .readdirSync(projectAgentsDir)
+    .filter((f) => f.startsWith("blue-") && f.endsWith(".md"));
+
+  const orphaned: AgentInfo[] = [];
+  for (const filename of files) {
+    const matchingAgent = availableAgents.find((a) => a.filename === filename);
+    if (matchingAgent && !trackedNames.includes(matchingAgent.name)) {
+      orphaned.push(matchingAgent);
+    }
+  }
+
+  return orphaned;
+}
+
+/**
+ * Repair manifest by re-tracking orphaned agents
+ */
+export function repairManifest(): { repaired: string[]; removed: string[] } {
+  const orphaned = findOrphanedAgents();
+  const repaired: string[] = [];
+  const removed: string[] = [];
+
+  if (orphaned.length === 0) {
+    return { repaired, removed };
+  }
+
+  // Get or create manifest
+  let manifest = readManifest();
+  if (!manifest) {
+    manifest = createManifest(PACKAGE_VERSION);
+  }
+
+  // Add orphaned agents to manifest
+  for (const agent of orphaned) {
+    manifest = addAgentToManifest(manifest, agent.name, PACKAGE_VERSION);
+    repaired.push(agent.name);
+  }
+
+  // Check for manifest entries that don't have files
+  const projectAgentsDir = getProjectAgentsDir();
+  const availableAgents = getAvailableAgents();
+
+  for (const agentName of Object.keys(manifest.agents)) {
+    const agent = availableAgents.find((a) => a.name === agentName);
+    if (agent) {
+      const filePath = path.join(projectAgentsDir, agent.filename);
+      if (!fs.existsSync(filePath)) {
+        manifest = removeAgentFromManifest(manifest, agentName);
+        removed.push(agentName);
+      }
+    }
+  }
+
+  writeManifest(manifest);
+  return { repaired, removed };
 }

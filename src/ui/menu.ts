@@ -4,8 +4,9 @@ import { addCommand } from "../commands/add.js";
 import { removeCommand } from "../commands/remove.js";
 import { listCommand } from "../commands/list.js";
 import { syncCommand } from "../commands/sync.js";
+import { repairCommand } from "../commands/repair.js";
 
-type MenuAction = "add" | "remove" | "list" | "sync" | "exit";
+type MenuAction = "add" | "remove" | "list" | "sync" | "repair" | "exit";
 
 export async function interactiveMenu(): Promise<void> {
   console.log(chalk.blue.bold("\n🌱 Blue Gardener - Cursor Agent Manager\n"));
@@ -35,6 +36,11 @@ export async function interactiveMenu(): Promise<void> {
           description: "Update installed agents to latest version",
         },
         {
+          name: "Repair manifest",
+          value: "repair",
+          description: "Fix issues with manifest or orphaned agents",
+        },
+        {
           name: "Exit",
           value: "exit",
           description: "Exit Blue Gardener",
@@ -56,6 +62,9 @@ export async function interactiveMenu(): Promise<void> {
         break;
       case "sync":
         await syncCommand();
+        break;
+      case "repair":
+        await repairCommand();
         break;
       case "exit":
         console.log(chalk.blue("Goodbye! 🌱\n"));

@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 import { program } from "commander";
+// Note: ESM + NodeNext requires .js extensions in imports.
+// TypeScript compiles .ts → .js, so imports must reference the compiled output.
 import { interactiveMenu } from "./ui/menu.js";
 import { addCommand } from "./commands/add.js";
 import { removeCommand } from "./commands/remove.js";
 import { listCommand } from "./commands/list.js";
 import { syncCommand } from "./commands/sync.js";
+import { repairCommand } from "./commands/repair.js";
 
 program
   .name("blue-gardener")
@@ -32,5 +35,10 @@ program
   .option("-s, --silent", "Run silently without output")
   .description("Sync installed agents to the latest version")
   .action(syncCommand);
+
+program
+  .command("repair")
+  .description("Repair manifest by re-tracking orphaned agents")
+  .action(repairCommand);
 
 program.parse();

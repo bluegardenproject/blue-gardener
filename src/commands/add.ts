@@ -38,9 +38,7 @@ export async function addCommand(agents?: string[]): Promise<void> {
       (name) => !availableAgents.some((a) => a.name === name)
     );
     if (invalid.length > 0) {
-      console.log(
-        chalk.yellow(`Unknown agents: ${invalid.join(", ")}`)
-      );
+      console.log(chalk.yellow(`Unknown agents: ${invalid.join(", ")}`));
     }
 
     const alreadyInstalled = agents.filter((name) =>
@@ -54,10 +52,12 @@ export async function addCommand(agents?: string[]): Promise<void> {
   } else {
     // Interactive selection
     agentsToInstall = await checkbox({
-      message: "Select agents to install:",
+      message:
+        "Select agents to install (↑↓ to navigate, space to select, enter to confirm):",
       choices: notInstalled.map((agent) => ({
-        name: `${agent.name} - ${agent.description}`,
+        name: agent.category ? `${agent.name} [${agent.category}]` : agent.name,
         value: agent.name,
+        description: agent.description,
       })),
     });
   }

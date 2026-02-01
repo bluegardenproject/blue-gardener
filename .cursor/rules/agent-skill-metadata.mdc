@@ -1,0 +1,62 @@
+---
+description: Ensure all agent and skill files include required metadata (category and tags)
+globs: agents/*.md
+alwaysApply: true
+---
+
+# Agent and Skill Metadata Requirements
+
+When creating or editing agent files in `agents/` or skill files in `skills/`, always include the required metadata fields in the YAML frontmatter.
+
+## Required Frontmatter Fields
+
+```yaml
+---
+name: agent-name
+description: Clear description of what the agent does and when to use it
+category: category-name
+tags: [tag1, tag2, tag3]
+---
+```
+
+## Field Guidelines
+
+### name
+- **Must start with `blue-` prefix** to avoid conflicts in target projects
+- Use descriptive names: `blue-{domain}-{specialty}` pattern
+- Lowercase letters and hyphens only
+- Match the filename (without .md extension)
+- Examples:
+  - `blue-github-actions-specialist`
+  - `blue-react-tailwind-developer`
+  - `blue-typescript-code-reviewer`
+
+### description
+- Explain what the agent/skill does
+- Include trigger scenarios ("Use when...")
+- Keep under 200 characters
+
+### category
+- Use one of the existing categories when possible:
+  - `infrastructure` - CI/CD, DevOps, deployment, cloud
+  - `development` - Frontend, backend, frameworks
+  - `quality` - Testing, code review, linting
+  - `documentation` - Docs, comments, READMEs
+  - `data` - Databases, analytics, data processing
+
+### tags
+- Array format: `[tag1, tag2, tag3]`
+- Use lowercase, hyphenated tags
+- Include 2-5 relevant tags
+- Reuse existing tags when applicable
+
+## Example
+
+```yaml
+---
+name: blue-github-actions-specialist
+description: GitHub Actions specialist for CI/CD pipelines and workflow automation. Use when working with .github/workflows or .github/actions.
+category: infrastructure
+tags: [ci-cd, devops, automation, github]
+---
+```

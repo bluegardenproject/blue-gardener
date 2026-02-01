@@ -20,6 +20,11 @@ export async function listCommand(): Promise<void> {
       : chalk.dim(" [not installed]");
 
     console.log(`  ${chalk.cyan(agent.name)}${status}`);
+    if (agent.category) {
+      console.log(
+        `    ${chalk.yellow(`[${agent.category}]`)} ${agent.tags.length > 0 ? chalk.dim(agent.tags.join(", ")) : ""}`
+      );
+    }
     if (agent.description) {
       console.log(`    ${chalk.dim(agent.description)}`);
     }

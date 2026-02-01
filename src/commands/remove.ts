@@ -21,17 +21,17 @@ export async function removeCommand(agents?: string[]): Promise<void> {
       (name) => !installedNames.includes(name)
     );
     if (notInstalled.length > 0) {
-      console.log(
-        chalk.yellow(`Not installed: ${notInstalled.join(", ")}`)
-      );
+      console.log(chalk.yellow(`Not installed: ${notInstalled.join(", ")}`));
     }
   } else {
     // Interactive selection
     agentsToRemove = await checkbox({
-      message: "Select agents to remove:",
+      message:
+        "Select agents to remove (↑↓ to navigate, space to select, enter to confirm):",
       choices: installedAgents.map((agent) => ({
-        name: `${agent.name} - ${agent.description}`,
+        name: agent.category ? `${agent.name} [${agent.category}]` : agent.name,
         value: agent.name,
+        description: agent.description,
       })),
     });
   }
