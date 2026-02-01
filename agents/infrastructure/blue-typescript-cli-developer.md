@@ -1,7 +1,7 @@
 ---
 name: blue-typescript-cli-developer
 description: TypeScript CLI tool development specialist. Expert in planning, implementing, and extending command-line tools with appropriate complexity levels. Use when building CLI tools, adding commands, or refactoring CLI architecture.
-category: development
+category: infrastructure
 tags: [typescript, cli, node, tooling]
 ---
 

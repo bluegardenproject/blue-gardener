@@ -3,10 +3,18 @@ import { select } from "@inquirer/prompts";
 import { addCommand } from "../commands/add.js";
 import { removeCommand } from "../commands/remove.js";
 import { listCommand } from "../commands/list.js";
+import { searchCommand } from "../commands/search.js";
 import { syncCommand } from "../commands/sync.js";
 import { repairCommand } from "../commands/repair.js";
 
-type MenuAction = "add" | "remove" | "list" | "sync" | "repair" | "exit";
+type MenuAction =
+  | "add"
+  | "remove"
+  | "list"
+  | "search"
+  | "sync"
+  | "repair"
+  | "exit";
 
 export async function interactiveMenu(): Promise<void> {
   console.log(chalk.blue.bold("\n🌱 Blue Gardener - Cursor Agent Manager\n"));
@@ -29,6 +37,11 @@ export async function interactiveMenu(): Promise<void> {
           name: "List agents",
           value: "list",
           description: "Show available and installed agents",
+        },
+        {
+          name: "Search agents",
+          value: "search",
+          description: "Search agents by name, description, or tags",
         },
         {
           name: "Sync agents",
@@ -59,6 +72,9 @@ export async function interactiveMenu(): Promise<void> {
         break;
       case "list":
         await listCommand();
+        break;
+      case "search":
+        await searchCommand();
         break;
       case "sync":
         await syncCommand();

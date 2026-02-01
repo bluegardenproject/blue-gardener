@@ -1,7 +1,7 @@
 ---
 name: blue-cursor-configuration-specialist
 description: Cursor IDE configuration specialist. Expert in creating and managing Cursor rules, skills, and subagents. Use when setting up .cursor/rules, .cursor/skills, .cursor/agents, or configuring AI behavior for a project.
-category: tooling
+category: configuration
 tags: [cursor, configuration, ai, rules, skills, agents]
 ---
 

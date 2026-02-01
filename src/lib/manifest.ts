@@ -1,9 +1,5 @@
 import fs from "fs";
-import {
-  getManifestPath,
-  getLegacyManifestPath,
-  ensureProjectAgentsDir,
-} from "./paths.js";
+import { getManifestPath, ensureProjectAgentsDir } from "./paths.js";
 
 export interface AgentEntry {
   version: string;
@@ -22,26 +18,13 @@ const MANIFEST_COMMENT =
 
 /**
  * Read the manifest file, returns null if it doesn't exist
- * Also handles migration from legacy manifest path
  */
 export function readManifest(): Manifest | null {
   const manifestPath = getManifestPath();
-  const legacyPath = getLegacyManifestPath();
 
-  // Check for new manifest first
   if (fs.existsSync(manifestPath)) {
     const content = fs.readFileSync(manifestPath, "utf-8");
     return JSON.parse(content) as Manifest;
-  }
-
-  // Check for legacy manifest and migrate
-  if (fs.existsSync(legacyPath)) {
-    const content = fs.readFileSync(legacyPath, "utf-8");
-    const manifest = JSON.parse(content) as Manifest;
-    // Migrate: write to new location and delete old
-    writeManifest(manifest);
-    fs.unlinkSync(legacyPath);
-    return manifest;
   }
 
   return null;

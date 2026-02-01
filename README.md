@@ -25,13 +25,17 @@ Opens an interactive menu to add, remove, list, sync, or repair agents.
 npx blue-gardener add
 
 # Add specific agents
-npx blue-gardener add blue-github-actions-specialist blue-typescript-cli-developer
+npx blue-gardener add blue-github-actions-specialist blue-react-developer
 
 # Remove agents
 npx blue-gardener remove blue-github-actions-specialist
 
 # List available and installed agents
 npx blue-gardener list
+
+# Search agents by name, description, category, or tags
+npx blue-gardener search react
+npx blue-gardener search testing
 
 # Sync installed agents to latest version
 npx blue-gardener sync
@@ -42,10 +46,15 @@ npx blue-gardener repair
 
 ## Available Agents
 
-| Agent                            | Category       | Description                                                        |
-| -------------------------------- | -------------- | ------------------------------------------------------------------ |
-| `blue-github-actions-specialist` | infrastructure | GitHub Actions and workflow specialist for CI/CD pipelines         |
-| `blue-typescript-cli-developer`  | development    | TypeScript CLI tool development with complexity-aware architecture |
+Blue Gardener includes 15 specialized agents across several categories:
+
+- **Orchestrators** - Planning and coordination (`blue-feature-specification-analyst`, `blue-architecture-designer`)
+- **Development** - React, state management, styling, API integration
+- **Quality** - Code review, testing, accessibility, performance, security
+- **Infrastructure** - GitHub Actions, CLI development
+- **Configuration** - Cursor IDE setup
+
+See the full [Agent Catalog](./agents/CATALOG.md) for detailed descriptions and the orchestration pattern.
 
 ## How It Works
 
@@ -65,8 +74,9 @@ your-project/
 ├── .cursor/
 │   └── agents/
 │       ├── .blue-generated-manifest.json  # Tracks installed agents
-│       ├── blue-github-actions-specialist.md
-│       └── blue-typescript-cli-developer.md
+│       ├── blue-react-developer.md
+│       ├── blue-state-management-expert.md
+│       └── ...
 └── ...
 ```
 

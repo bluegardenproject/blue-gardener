@@ -33,13 +33,6 @@ export function getManifestPath(): string {
 }
 
 /**
- * Get the path to the old manifest file (for migration)
- */
-export function getLegacyManifestPath(): string {
-  return path.join(getProjectAgentsDir(), ".blue-gardener.json");
-}
-
-/**
  * Ensure the project's .cursor/agents directory exists
  */
 export function ensureProjectAgentsDir(): void {

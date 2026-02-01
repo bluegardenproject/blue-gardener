@@ -24,6 +24,8 @@ export interface AgentInfo {
   name: string;
   description: string;
   filename: string;
+  /** Relative path from agents dir to source file (for subfolder support) */
+  sourcePath: string;
   tags: string[];
   category: string;
 }
@@ -65,6 +67,29 @@ function parseAgentFrontmatter(content: string): {
 }
 
 /**
+ * Recursively find all .md files in a directory
+ */
+function findMarkdownFiles(dir: string): string[] {
+  const results: string[] = [];
+  if (!fs.existsSync(dir)) {
+    return results;
+  }
+
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      // Recursively search subdirectories
+      results.push(...findMarkdownFiles(fullPath));
+    } else if (entry.isFile() && entry.name.endsWith(".md")) {
+      results.push(fullPath);
+    }
+  }
+
+  return results;
+}
+
+/**
  * Get list of available agents from the bundled agents directory
  */
 export function getAvailableAgents(): AgentInfo[] {
@@ -73,15 +98,21 @@ export function getAvailableAgents(): AgentInfo[] {
     return [];
   }
 
-  const files = fs.readdirSync(agentsDir).filter((f) => f.endsWith(".md"));
-  return files.map((filename) => {
-    const content = fs.readFileSync(path.join(agentsDir, filename), "utf-8");
+  // Recursively find all .md files in agents directory and subdirectories
+  const files = findMarkdownFiles(agentsDir);
+
+  return files.map((filePath) => {
+    const content = fs.readFileSync(filePath, "utf-8");
     const { name, description, tags, category } =
       parseAgentFrontmatter(content);
+    // Use just the filename (not the full path) for the output file
+    const filename = path.basename(filePath);
     return {
       name: name || path.basename(filename, ".md"),
       description,
       filename,
+      // Store the relative path from agents dir for source lookup
+      sourcePath: path.relative(agentsDir, filePath),
       tags,
       category,
     };
@@ -111,10 +142,10 @@ export function installAgent(agentName: string): boolean {
 
   ensureProjectAgentsDir();
 
-  // Copy the agent file
-  const sourcePath = path.join(getBundledAgentsDir(), agent.filename);
+  // Copy the agent file (use sourcePath for source, filename for destination - flat structure)
+  const sourceFilePath = path.join(getBundledAgentsDir(), agent.sourcePath);
   const destPath = path.join(getProjectAgentsDir(), agent.filename);
-  fs.copyFileSync(sourcePath, destPath);
+  fs.copyFileSync(sourceFilePath, destPath);
 
   // Update manifest
   let manifest = readManifest();
@@ -175,12 +206,12 @@ export function syncAgents(): { synced: string[]; failed: string[] } {
       continue;
     }
 
-    // Copy the latest version
-    const sourcePath = path.join(getBundledAgentsDir(), agent.filename);
+    // Copy the latest version (use sourcePath for source, filename for destination)
+    const sourceFilePath = path.join(getBundledAgentsDir(), agent.sourcePath);
     const destPath = path.join(getProjectAgentsDir(), agent.filename);
 
     try {
-      fs.copyFileSync(sourcePath, destPath);
+      fs.copyFileSync(sourceFilePath, destPath);
       synced.push(agentName);
     } catch {
       failed.push(agentName);

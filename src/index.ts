@@ -8,6 +8,7 @@ import { removeCommand } from "./commands/remove.js";
 import { listCommand } from "./commands/list.js";
 import { syncCommand } from "./commands/sync.js";
 import { repairCommand } from "./commands/repair.js";
+import { searchCommand } from "./commands/search.js";
 
 program
   .name("blue-gardener")
@@ -29,6 +30,11 @@ program
   .command("list")
   .description("List available and installed agents")
   .action(listCommand);
+
+program
+  .command("search [query]")
+  .description("Search agents by name, description, category, or tags")
+  .action(searchCommand);
 
 program
   .command("sync")
