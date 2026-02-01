@@ -1,0 +1,43 @@
+{
+  "name": "blue-gardener",
+  "version": "0.1.0",
+  "description": "CLI tool to manage Cursor subagents and skills - install, remove, and sync AI agents and skills for your projects",
+  "type": "module",
+  "bin": {
+    "blue-gardener": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "agents"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepare": "npm run build",
+    "release": "release-it"
+  },
+  "keywords": [
+    "cursor",
+    "ai",
+    "agents",
+    "subagents",
+    "cli",
+    "developer-tools"
+  ],
+  "author": "Philipp Trentmann",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.2.0",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3"
+  },
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^10.0.4",
+    "@types/node": "^25.1.0",
+    "release-it": "^19.2.4",
+    "typescript": "^5.9.3"
+  }
+}
