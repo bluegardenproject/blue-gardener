@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import chalk from "chalk";
 import {
   getBundledAgentsDir,
   getProjectAgentsDir,
@@ -19,6 +20,26 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const packageJson = require("../../package.json");
 const PACKAGE_VERSION: string = packageJson.version;
+
+/**
+ * Check if debug mode is enabled via environment variable
+ */
+function isDebugEnabled(): boolean {
+  return (
+    process.env.DEBUG === "blue-gardener" ||
+    process.env.BLUE_GARDENER_DEBUG === "1" ||
+    process.env.BLUE_GARDENER_DEBUG === "true"
+  );
+}
+
+/**
+ * Log debug message if debug mode is enabled
+ */
+function debugLog(message: string): void {
+  if (isDebugEnabled()) {
+    console.log(chalk.gray(`[debug] ${message}`));
+  }
+}
 
 export interface AgentInfo {
   name: string;
@@ -100,23 +121,34 @@ export function getAvailableAgents(): AgentInfo[] {
 
   // Recursively find all .md files in agents directory and subdirectories
   const files = findMarkdownFiles(agentsDir);
+  const agents: AgentInfo[] = [];
 
-  return files.map((filePath) => {
+  for (const filePath of files) {
     const content = fs.readFileSync(filePath, "utf-8");
     const { name, description, tags, category } =
       parseAgentFrontmatter(content);
+    const relativePath = path.relative(agentsDir, filePath);
+
+    // Skip files without valid name frontmatter (e.g., CATALOG.md)
+    if (!name) {
+      debugLog(`Skipped ${relativePath} - no 'name' field in frontmatter`);
+      continue;
+    }
+
     // Use just the filename (not the full path) for the output file
     const filename = path.basename(filePath);
-    return {
-      name: name || path.basename(filename, ".md"),
+    agents.push({
+      name,
       description,
       filename,
       // Store the relative path from agents dir for source lookup
-      sourcePath: path.relative(agentsDir, filePath),
+      sourcePath: relativePath,
       tags,
       category,
-    };
-  });
+    });
+  }
+
+  return agents;
 }
 
 /**

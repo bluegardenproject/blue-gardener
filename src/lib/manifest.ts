@@ -41,7 +41,10 @@ export function writeManifest(manifest: Manifest): void {
     _comment: MANIFEST_COMMENT,
     ...manifest,
   };
-  fs.writeFileSync(manifestPath, JSON.stringify(manifestWithComment, null, 2));
+  fs.writeFileSync(
+    manifestPath,
+    JSON.stringify(manifestWithComment, null, 2) + "\n"
+  );
 }
 
 /**

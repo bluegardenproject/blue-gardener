@@ -10,17 +10,21 @@ High-level planning and coordination agents that understand the full picture and
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
 | `blue-feature-specification-analyst` | Product-technical bridge that clarifies requirements, defines acceptance criteria, and creates implementation plans |
 | `blue-architecture-designer`         | Technical strategy specialist for component architecture, data flow, and system integration                         |
+| `blue-refactoring-strategy-planner`  | Strategic planner for large refactoring efforts, migrations, and technical debt reduction                           |
+| `blue-app-quality-gate-keeper`       | Quality gate orchestrator for security, performance, and code quality audits before releases                        |
 
 ## Development Specialists
 
 Domain experts for implementation work.
 
-| Agent                          | Description                                                                  |
-| ------------------------------ | ---------------------------------------------------------------------------- |
-| `blue-react-developer`         | React ecosystem specialist for components, hooks, patterns, and React Native |
-| `blue-state-management-expert` | State management covering Redux, Zustand, XState, Jotai, and Context         |
-| `blue-ui-styling-specialist`   | Visual implementation with Tailwind, CSS-in-JS, and responsive design        |
-| `blue-api-integration-expert`  | Data layer specialist for REST, GraphQL, tRPC, and data fetching patterns    |
+| Agent                          | Description                                                                   |
+| ------------------------------ | ----------------------------------------------------------------------------- |
+| `blue-react-developer`         | React ecosystem specialist for components, hooks, patterns, and React Native  |
+| `blue-state-management-expert` | State management covering Redux, Zustand, XState, Jotai, and Context          |
+| `blue-ui-styling-specialist`   | Visual implementation with Tailwind, CSS-in-JS, and responsive design         |
+| `blue-api-integration-expert`  | Data layer specialist for REST, GraphQL, tRPC, and data fetching patterns     |
+| `blue-animation-specialist`    | Web animations and micro-interactions with CSS, Framer Motion, and GSAP       |
+| `blue-storybook-specialist`    | Storybook configuration, efficient story writing, and component documentation |
 
 ## Quality Specialists
 
@@ -34,6 +38,7 @@ Code quality, testing, and optimization experts.
 | `blue-e2e-testing-specialist`   | End-to-end testing with Playwright and Cypress                                  |
 | `blue-performance-specialist`   | Performance optimization for bundle size, rendering, and caching                |
 | `blue-security-specialist`      | Frontend security for auth flows, XSS/CSRF prevention, and secure data handling |
+| `blue-seo-specialist`           | SEO optimization for meta tags, structured data, and search engine visibility   |
 
 ## Infrastructure
 
@@ -43,6 +48,8 @@ CI/CD, tooling, and configuration specialists.
 | -------------------------------- | ------------------------------------------------------------------ |
 | `blue-github-actions-specialist` | GitHub Actions and workflow specialist for CI/CD pipelines         |
 | `blue-typescript-cli-developer`  | TypeScript CLI tool development with complexity-aware architecture |
+| `blue-docker-specialist`         | Docker and containerization for development and production         |
+| `blue-monorepo-specialist`       | Monorepo tooling with Nx, Turborepo, and pnpm workspaces           |
 
 ## Configuration
 
@@ -54,44 +61,76 @@ IDE and tool configuration experts.
 
 ---
 
-## Orchestration Pattern
+## Orchestration Patterns
 
-Blue Gardener agents are designed to work together. For complex features:
+Blue Gardener agents are designed to work together. Here are the key orchestration patterns:
 
-1. **Start with the Feature Specification Analyst** - Clarifies requirements and creates an implementation plan
-2. **Consult the Architecture Designer** - Designs technical strategy and component structure
-3. **Delegate to Specialists** - React, State Management, UI, API experts handle their domains
-4. **Quality Review** - Code Reviewer, Testing, and Security specialists validate the work
+### Feature Development Flow
 
-### Example Workflow
+For implementing new features:
 
 ```
-User: "Implement checkout flow with x-state in React/Tailwind"
-
 1. @blue-feature-specification-analyst
-   → Asks clarifying questions
-   → Creates product specification with acceptance criteria
+   → Clarifies requirements
+   → Creates implementation plan
 
 2. @blue-architecture-designer
-   → Proposes component structure
-   → Recommends x-state for flow control, existing Redux for cart
-   → Gets user confirmation
+   → Designs technical approach
+   → Recommends specialists
 
-3. Implementation (parallel):
-   → @blue-state-management-expert: XState machine design
-   → @blue-react-developer: Component implementation
-   → @blue-ui-styling-specialist: Tailwind styling
+3. Implementation specialists (parallel):
+   → @blue-react-developer
+   → @blue-state-management-expert
+   → @blue-ui-styling-specialist
 
-4. Quality:
-   → @blue-code-reviewer: Review implementation
-   → @blue-security-specialist: Security check (if payment involved)
+4. Quality gates:
+   → @blue-code-reviewer
+   → @blue-security-specialist (if sensitive)
+```
+
+### Refactoring Flow
+
+For large migrations and refactoring:
+
+```
+1. @blue-refactoring-strategy-planner
+   → Analyzes current state
+   → Creates phased migration plan
+   → Identifies risks
+
+2. Implementation specialists:
+   → Relevant specialists per phase
+
+3. Verification:
+   → @blue-unit-testing-specialist
+   → @blue-e2e-testing-specialist
+```
+
+### Quality Gate Flow
+
+For pre-release audits:
+
+```
+1. @blue-app-quality-gate-keeper
+   → Determines relevant audits
+   → Coordinates specialists
+
+2. Audits (based on context):
+   → @blue-code-reviewer (always)
+   → @blue-security-specialist (auth, payments)
+   → @blue-performance-specialist (user-facing)
+   → @blue-accessibility-specialist (UI)
+   → @blue-seo-specialist (public pages)
+
+3. Consolidated report with pass/fail decision
 ```
 
 ### Scaling with Complexity
 
-The number of agents involved scales with task complexity:
-
-- **Simple bug fix**: 1-2 agents (e.g., react-developer + reviewer)
-- **Standard feature**: 3-5 agents (e.g., planner + architect + react + state + reviewer)
-- **Complex feature with security**: 6-8 agents (add security, testing specialists)
-- **Full feature with E2E tests**: 8+ agents (add e2e-testing, performance, etc.)
+| Task Complexity    | Typical Agents Involved                               |
+| ------------------ | ----------------------------------------------------- |
+| Simple bug fix     | 1-2 (react-developer + reviewer)                      |
+| Standard feature   | 3-5 (planner + architect + implementation + reviewer) |
+| Complex feature    | 6-8 (add security, testing specialists)               |
+| Full release audit | 5-7 (quality-gate-keeper + all quality specialists)   |
+| Major refactoring  | 4-6 (strategy-planner + implementation + testing)     |
