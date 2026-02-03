@@ -2,6 +2,18 @@
 
 Complete list of available agents in Blue Gardener.
 
+**Total: 24 agents**
+
+| Category       | Count |
+| -------------- | ----- |
+| Orchestrators  | 4     |
+| Development    | 7     |
+| Quality        | 7     |
+| Infrastructure | 5     |
+| Configuration  | 1     |
+
+---
+
 ## Orchestrators
 
 High-level planning and coordination agents that understand the full picture and delegate to specialists.
@@ -17,14 +29,15 @@ High-level planning and coordination agents that understand the full picture and
 
 Domain experts for implementation work.
 
-| Agent                          | Description                                                                   |
-| ------------------------------ | ----------------------------------------------------------------------------- |
-| `blue-react-developer`         | React ecosystem specialist for components, hooks, patterns, and React Native  |
-| `blue-state-management-expert` | State management covering Redux, Zustand, XState, Jotai, and Context          |
-| `blue-ui-styling-specialist`   | Visual implementation with Tailwind, CSS-in-JS, and responsive design         |
-| `blue-api-integration-expert`  | Data layer specialist for REST, GraphQL, tRPC, and data fetching patterns     |
-| `blue-animation-specialist`    | Web animations and micro-interactions with CSS, Framer Motion, and GSAP       |
-| `blue-storybook-specialist`    | Storybook configuration, efficient story writing, and component documentation |
+| Agent                             | Description                                                                         |
+| --------------------------------- | ----------------------------------------------------------------------------------- |
+| `blue-react-developer`            | React ecosystem specialist for components, hooks, patterns, and React Native        |
+| `blue-state-management-expert`    | State management covering Redux, Zustand, XState, Jotai, and Context                |
+| `blue-ui-styling-specialist`      | Visual implementation with Tailwind, CSS-in-JS, and responsive design               |
+| `blue-api-integration-expert`     | Data layer specialist for REST, GraphQL, tRPC, and data fetching patterns           |
+| `blue-third-party-api-strategist` | Plans third-party API integrations: auth, rate limits, data mapping, error handling |
+| `blue-animation-specialist`       | Web animations and micro-interactions with CSS, Framer Motion, and GSAP             |
+| `blue-storybook-specialist`       | Storybook configuration, efficient story writing, and component documentation       |
 
 ## Quality Specialists
 
@@ -44,12 +57,13 @@ Code quality, testing, and optimization experts.
 
 CI/CD, tooling, and configuration specialists.
 
-| Agent                            | Description                                                        |
-| -------------------------------- | ------------------------------------------------------------------ |
-| `blue-github-actions-specialist` | GitHub Actions and workflow specialist for CI/CD pipelines         |
-| `blue-typescript-cli-developer`  | TypeScript CLI tool development with complexity-aware architecture |
-| `blue-docker-specialist`         | Docker and containerization for development and production         |
-| `blue-monorepo-specialist`       | Monorepo tooling with Nx, Turborepo, and pnpm workspaces           |
+| Agent                                     | Description                                                                   |
+| ----------------------------------------- | ----------------------------------------------------------------------------- |
+| `blue-github-actions-specialist`          | GitHub Actions and workflow specialist for CI/CD pipelines                    |
+| `blue-typescript-cli-developer`           | TypeScript CLI tool development with complexity-aware architecture            |
+| `blue-docker-specialist`                  | Docker and containerization for development and production                    |
+| `blue-monorepo-specialist`                | Monorepo tooling with Nx, Turborepo, and pnpm workspaces                      |
+| `blue-cron-job-implementation-specialist` | Cron job expert for implementing, maintaining, and monitoring scheduled tasks |
 
 ## Configuration
 
@@ -104,6 +118,30 @@ For large migrations and refactoring:
 3. Verification:
    → @blue-unit-testing-specialist
    → @blue-e2e-testing-specialist
+```
+
+### Third-Party API Integration Flow
+
+For integrating external APIs (Stripe, Auth0, etc.):
+
+```
+1. @blue-architecture-designer
+   → Identifies need for third-party integration
+   → High-level technical strategy
+
+2. @blue-third-party-api-strategist
+   → Reviews API documentation
+   → Plans auth, rate limits, data mapping
+   → Defines error handling strategy
+   → Creates implementation tasks
+
+3. @blue-api-integration-expert
+   → Implements the technical details
+   → React Query/RTK Query hooks
+   → Error handling code
+
+4. @blue-security-specialist (if auth/payments)
+   → Reviews security aspects
 ```
 
 ### Quality Gate Flow
