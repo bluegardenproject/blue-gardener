@@ -18,7 +18,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky && npm run build",
-    "release": "release-it"
+    "release": "release-it",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "lint-staged": {
     "*.{ts,js,json,md,yml,yaml}": "prettier --write"
@@ -39,6 +42,14 @@
   ],
   "author": "Philipp Trentmann",
   "license": "MIT",
+  "homepage": "https://bluegardenproject.github.io/blue-gardener/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bluegardenproject/blue-gardener.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bluegardenproject/blue-gardener/issues"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
@@ -56,6 +67,7 @@
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "release-it": "^19.2.4",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitepress": "^1.6.4"
   }
 }

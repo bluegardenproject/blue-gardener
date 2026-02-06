@@ -1,0 +1,50 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":preserveSemverRanges"
+  ],
+  "labels": ["dependencies"],
+  "commitMessagePrefix": "chore:",
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "schedule": ["before 10am on monday"],
+  "timezone": "UTC",
+  "packageRules": [
+    {
+      "description": "Pin GitHub Actions to commit SHA with version tag comment",
+      "matchManagers": ["github-actions"],
+      "pinDigests": true,
+      "automerge": false,
+      "groupName": "GitHub Actions"
+    },
+    {
+      "description": "Group all npm dev dependencies",
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "dev dependencies",
+      "automerge": false
+    },
+    {
+      "description": "Group all npm production dependencies",
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["dependencies"],
+      "groupName": "production dependencies",
+      "automerge": false
+    },
+    {
+      "description": "Auto-merge patch updates for non-major versions",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"],
+    "assignees": []
+  }
+}
