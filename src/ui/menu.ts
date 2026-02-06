@@ -17,7 +17,9 @@ type MenuAction =
   | "exit";
 
 export async function interactiveMenu(): Promise<void> {
-  console.log(chalk.blue.bold("\n🌱 Blue Gardener - Cursor Agent Manager\n"));
+  console.log(
+    chalk.blue.bold("\n🌱 Blue Gardener - Multi-Platform AI Agent Manager\n")
+  );
 
   while (true) {
     const action = await select<MenuAction>({

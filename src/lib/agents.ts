@@ -13,7 +13,10 @@ import {
   addAgentToManifest,
   removeAgentFromManifest,
   getInstalledAgentNames,
+  updatePlatform,
 } from "./manifest.js";
+import { Platform, detectPlatform } from "./platform.js";
+import { getAdapter } from "./adapters/index.js";
 
 // Read version from package.json
 import { createRequire } from "module";
@@ -49,6 +52,57 @@ export interface AgentInfo {
   sourcePath: string;
   tags: string[];
   category: string;
+}
+
+export interface CategoryInfo {
+  id: string;
+  name: string;
+  count: number;
+}
+
+/**
+ * Get list of all categories with agent counts
+ */
+export function getCategories(): CategoryInfo[] {
+  const agents = getAvailableAgents();
+  const categoryCounts = new Map<string, number>();
+
+  for (const agent of agents) {
+    const category = agent.category || "other";
+    categoryCounts.set(category, (categoryCounts.get(category) || 0) + 1);
+  }
+
+  const categoryOrder = [
+    "orchestrator",
+    "development",
+    "quality",
+    "infrastructure",
+    "configuration",
+    "blockchain",
+    "other",
+  ];
+
+  const categories: CategoryInfo[] = [];
+  for (const categoryId of categoryOrder) {
+    const count = categoryCounts.get(categoryId);
+    if (count) {
+      categories.push({
+        id: categoryId,
+        name: categoryId.charAt(0).toUpperCase() + categoryId.slice(1),
+        count,
+      });
+    }
+  }
+
+  return categories;
+}
+
+/**
+ * Get agents by category
+ */
+export function getAgentsByCategory(category: string): AgentInfo[] {
+  const agents = getAvailableAgents();
+  return agents.filter((a) => a.category === category);
 }
 
 /**
@@ -164,7 +218,7 @@ export function getInstalledAgents(): AgentInfo[] {
 /**
  * Install an agent to the project
  */
-export function installAgent(agentName: string): boolean {
+export function installAgent(agentName: string, platform?: Platform): boolean {
   const availableAgents = getAvailableAgents();
   const agent = availableAgents.find((a) => a.name === agentName);
 
@@ -172,17 +226,30 @@ export function installAgent(agentName: string): boolean {
     return false;
   }
 
-  ensureProjectAgentsDir();
+  // Get platform from manifest or parameter
+  let manifest = readManifest();
+  const targetPlatform =
+    platform || manifest?.platform || detectPlatform() || "cursor";
 
-  // Copy the agent file (use sourcePath for source, filename for destination - flat structure)
-  const sourceFilePath = path.join(getBundledAgentsDir(), agent.sourcePath);
-  const destPath = path.join(getProjectAgentsDir(), agent.filename);
-  fs.copyFileSync(sourceFilePath, destPath);
+  // Get adapter for platform
+  const adapter = getAdapter(targetPlatform);
+
+  // Ensure directory exists
+  ensureProjectAgentsDir(targetPlatform);
+
+  // Install agent using adapter
+  try {
+    adapter.installAgent(agentName, agent);
+  } catch (error) {
+    debugLog(`Failed to install ${agentName}: ${error}`);
+    return false;
+  }
 
   // Update manifest
-  let manifest = readManifest();
   if (!manifest) {
-    manifest = createManifest(PACKAGE_VERSION);
+    manifest = createManifest(PACKAGE_VERSION, targetPlatform);
+  } else if (!manifest.platform) {
+    manifest = updatePlatform(manifest, targetPlatform);
   }
   manifest = addAgentToManifest(manifest, agentName, PACKAGE_VERSION);
   writeManifest(manifest);
@@ -199,14 +266,20 @@ export function removeAgent(agentName: string): boolean {
     return false;
   }
 
-  // Find the agent file
+  // Get platform from manifest
+  const platform = manifest.platform || detectPlatform() || "cursor";
+  const adapter = getAdapter(platform);
+
+  // Find the agent info
   const availableAgents = getAvailableAgents();
   const agent = availableAgents.find((a) => a.name === agentName);
 
   if (agent) {
-    const filePath = path.join(getProjectAgentsDir(), agent.filename);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+    try {
+      adapter.removeAgent(agentName, agent);
+    } catch (error) {
+      debugLog(`Failed to remove ${agentName}: ${error}`);
+      return false;
     }
   }
 
@@ -226,27 +299,45 @@ export function syncAgents(): { synced: string[]; failed: string[] } {
     return { synced: [], failed: [] };
   }
 
+  // Get platform from manifest
+  const platform = manifest.platform || detectPlatform() || "cursor";
+  const adapter = getAdapter(platform);
+
   const synced: string[] = [];
   const failed: string[] = [];
 
+  // Get installed agents info
+  const availableAgents = getAvailableAgents();
+  const installedAgents: typeof availableAgents = [];
+
   for (const agentName of Object.keys(manifest.agents)) {
-    const availableAgents = getAvailableAgents();
     const agent = availableAgents.find((a) => a.name === agentName);
-
-    if (!agent) {
+    if (agent) {
+      installedAgents.push(agent);
+    } else {
       failed.push(agentName);
-      continue;
     }
+  }
 
-    // Copy the latest version (use sourcePath for source, filename for destination)
-    const sourceFilePath = path.join(getBundledAgentsDir(), agent.sourcePath);
-    const destPath = path.join(getProjectAgentsDir(), agent.filename);
-
+  if (adapter.isSingleFile) {
+    // Single-file platforms: regenerate entire file
     try {
-      fs.copyFileSync(sourceFilePath, destPath);
-      synced.push(agentName);
-    } catch {
-      failed.push(agentName);
+      adapter.syncAgents(installedAgents);
+      synced.push(...installedAgents.map((a) => a.name));
+    } catch (error) {
+      debugLog(`Failed to sync agents: ${error}`);
+      failed.push(...installedAgents.map((a) => a.name));
+    }
+  } else {
+    // Multi-file platforms: update each file individually
+    for (const agent of installedAgents) {
+      try {
+        adapter.installAgent(agent.name, agent);
+        synced.push(agent.name);
+      } catch (error) {
+        debugLog(`Failed to sync ${agent.name}: ${error}`);
+        failed.push(agent.name);
+      }
     }
   }
 

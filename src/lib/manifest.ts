@@ -1,5 +1,6 @@
 import fs from "fs";
 import { getManifestPath, ensureProjectAgentsDir } from "./paths.js";
+import { Platform } from "./platform.js";
 
 export interface AgentEntry {
   version: string;
@@ -10,6 +11,7 @@ export interface Manifest {
   _comment?: string;
   version: string;
   installedAt: string;
+  platform?: Platform;
   agents: Record<string, AgentEntry>;
 }
 
@@ -50,12 +52,26 @@ export function writeManifest(manifest: Manifest): void {
 /**
  * Create a new empty manifest
  */
-export function createManifest(version: string): Manifest {
+export function createManifest(version: string, platform?: Platform): Manifest {
   return {
     _comment: MANIFEST_COMMENT,
     version,
     installedAt: new Date().toISOString(),
+    platform,
     agents: {},
+  };
+}
+
+/**
+ * Update platform in manifest
+ */
+export function updatePlatform(
+  manifest: Manifest,
+  platform: Platform
+): Manifest {
+  return {
+    ...manifest,
+    platform,
   };
 }
 

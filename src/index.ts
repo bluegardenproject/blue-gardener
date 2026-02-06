@@ -12,7 +12,7 @@ import { searchCommand } from "./commands/search.js";
 
 program
   .name("blue-gardener")
-  .description("Manage Cursor subagents for your project")
+  .description("Manage AI coding agents across multiple platforms")
   .version("0.1.0")
   .action(() => interactiveMenu());
 

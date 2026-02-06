@@ -1,7 +1,7 @@
 {
   "name": "blue-gardener",
   "version": "0.1.0",
-  "description": "CLI tool to manage Cursor subagents and skills - install, remove, and sync AI agents and skills for your projects",
+  "description": "CLI tool to manage AI coding agents across multiple platforms - install, remove, and sync specialized AI agents for Cursor, Claude Desktop, Codex, GitHub Copilot, Windsurf, and OpenCode",
   "type": "module",
   "bin": {
     "blue-gardener": "./dist/index.js"
@@ -25,11 +25,17 @@
   },
   "keywords": [
     "cursor",
+    "claude",
+    "codex",
+    "copilot",
+    "windsurf",
+    "opencode",
     "ai",
     "agents",
     "subagents",
     "cli",
-    "developer-tools"
+    "developer-tools",
+    "ai-coding-assistant"
   ],
   "author": "Philipp Trentmann",
   "license": "MIT",
