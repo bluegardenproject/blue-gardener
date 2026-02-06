@@ -1,10 +1,22 @@
 import chalk from "chalk";
-import { checkbox } from "@inquirer/prompts";
+import { checkbox, select } from "@inquirer/prompts";
 import {
   getAvailableAgents,
   installAgent,
   getInstalledAgents,
+  getCategories,
+  getAgentsByCategory,
 } from "../lib/agents.js";
+import {
+  detectPlatform,
+  promptForPlatform,
+  getPlatformInfo,
+} from "../lib/platform.js";
+import {
+  readManifest,
+  writeManifest,
+  updatePlatform,
+} from "../lib/manifest.js";
 
 export async function addCommand(agents?: string[]): Promise<void> {
   const availableAgents = getAvailableAgents();
@@ -50,12 +62,36 @@ export async function addCommand(agents?: string[]): Promise<void> {
       );
     }
   } else {
-    // Interactive selection
+    // Interactive selection with categories
+    const categories = getCategories();
+
+    // Step 1: Select category
+    const selectedCategory = await select({
+      message: "Select a category:",
+      choices: categories.map((cat) => ({
+        name: `${cat.name} (${cat.count} ${cat.count === 1 ? "agent" : "agents"})`,
+        value: cat.id,
+      })),
+    });
+
+    // Step 2: Select agents from category
+    const categoryAgents = getAgentsByCategory(selectedCategory).filter((a) =>
+      notInstalled.some((na) => na.name === a.name)
+    );
+
+    if (categoryAgents.length === 0) {
+      console.log(
+        chalk.green(
+          `All agents in ${selectedCategory} category are already installed.`
+        )
+      );
+      return;
+    }
+
     agentsToInstall = await checkbox({
-      message:
-        "Select agents to install (↑↓ to navigate, space to select, enter to confirm):",
-      choices: notInstalled.map((agent) => ({
-        name: agent.category ? `${agent.name} [${agent.category}]` : agent.name,
+      message: `Select agents to install (${selectedCategory}):`,
+      choices: categoryAgents.map((agent) => ({
+        name: agent.name,
         value: agent.name,
         description: agent.description,
       })),
@@ -67,9 +103,32 @@ export async function addCommand(agents?: string[]): Promise<void> {
     return;
   }
 
-  // Install selected agents
+  // Step 3: Platform detection/prompt (on first use)
+  let manifest = readManifest();
+  let platform = manifest?.platform || detectPlatform();
+
+  if (!platform) {
+    // First time - prompt for platform
+    console.log(
+      chalk.cyan(
+        "\nWelcome to Blue Gardener! Let's set up your platform configuration."
+      )
+    );
+    platform = await promptForPlatform();
+
+    // Update manifest with platform
+    if (manifest) {
+      manifest = updatePlatform(manifest, platform);
+      writeManifest(manifest);
+    }
+
+    const platformInfo = getPlatformInfo(platform);
+    console.log(chalk.green(`\n✓ Platform set to: ${platformInfo.name}\n`));
+  }
+
+  // Step 4: Install selected agents
   for (const name of agentsToInstall) {
-    const success = installAgent(name);
+    const success = installAgent(name, platform);
     if (success) {
       console.log(chalk.green(`✓ Installed ${name}`));
     } else {

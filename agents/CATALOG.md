@@ -2,11 +2,11 @@
 
 Complete list of available agents in Blue Gardener.
 
-**Total: 43 agents**
+**Total: 44 agents**
 
 | Category       | Count |
 | -------------- | ----- |
-| Orchestrators  | 4     |
+| Orchestrators  | 5     |
 | Development    | 9     |
 | Quality        | 9     |
 | Infrastructure | 9     |
@@ -19,12 +19,13 @@ Complete list of available agents in Blue Gardener.
 
 High-level planning and coordination agents that understand the full picture and delegate to specialists.
 
-| Agent                                | Description                                                                                                         |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| `blue-feature-specification-analyst` | Product-technical bridge that clarifies requirements, defines acceptance criteria, and creates implementation plans |
-| `blue-architecture-designer`         | Technical strategy specialist for component architecture, data flow, and system integration                         |
-| `blue-refactoring-strategy-planner`  | Strategic planner for large refactoring efforts, migrations, and technical debt reduction                           |
-| `blue-app-quality-gate-keeper`       | Quality gate orchestrator for security, performance, and code quality audits before releases                        |
+| Agent                                    | Description                                                                                                         |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `blue-feature-specification-analyst`     | Product-technical bridge that clarifies requirements, defines acceptance criteria, and creates implementation plans |
+| `blue-architecture-designer`             | Technical strategy specialist for component architecture, data flow, and system integration                         |
+| `blue-refactoring-strategy-planner`      | Strategic planner for large refactoring efforts, migrations, and technical debt reduction                           |
+| `blue-app-quality-gate-keeper`           | Quality gate orchestrator for security, performance, and code quality audits before releases                        |
+| `blue-implementation-review-coordinator` | Post-implementation coordinator that ensures features meet quality standards through iterative review-fix cycles    |
 
 ## Development Specialists
 
@@ -76,11 +77,11 @@ CI/CD, tooling, databases, and configuration specialists.
 
 ## Configuration
 
-IDE and tool configuration experts.
+AI platform and tool configuration experts.
 
-| Agent                                  | Description                                               |
-| -------------------------------------- | --------------------------------------------------------- |
-| `blue-cursor-configuration-specialist` | Cursor IDE configuration for rules, skills, and subagents |
+| Agent                                       | Description                                                                                                                                               |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `blue-ai-platform-configuration-specialist` | Multi-platform AI configuration for agents, rules, and conventions across 6 platforms (Cursor, Claude Desktop, Codex, GitHub Copilot, Windsurf, OpenCode) |
 
 ## Blockchain
 
@@ -106,6 +107,8 @@ Smart contract development, DeFi, and Web3 specialists.
 
 Blue Gardener agents are designed to work together. Here are the key orchestration patterns:
 
+**For comprehensive orchestration patterns and workflows, see [ORCHESTRATION_GUIDE.md](../ORCHESTRATION_GUIDE.md).**
+
 ### Feature Development Flow
 
 For implementing new features:
@@ -124,9 +127,12 @@ For implementing new features:
    → @blue-state-management-expert
    → @blue-ui-styling-specialist
 
-4. Quality gates:
-   → @blue-frontend-code-reviewer
-   → @blue-security-specialist (if sensitive)
+4. @blue-implementation-review-coordinator
+   → Quality review with feedback loops
+   → Delegates to @blue-app-quality-gate-keeper
+   → Routes fixes to specialists
+   → Iterates until quality standards met
+   → Final sign-off
 ```
 
 ### Backend Development Flow
@@ -191,10 +197,14 @@ For large migrations and refactoring:
    → Creates phased migration plan
    → Identifies risks
 
-2. Implementation specialists:
-   → Relevant specialists per phase
+2. Phase execution with quality gates:
+   → Implementation specialists per phase
+   → @blue-implementation-review-coordinator after each phase
+   → Sign-off before next phase begins
 
-3. Verification:
+3. Final verification:
+   → @blue-implementation-review-coordinator
+   → Comprehensive quality check
    → @blue-unit-testing-specialist
    → @blue-e2e-testing-specialist
 ```
@@ -223,33 +233,40 @@ For integrating external APIs (Stripe, Auth0, etc.):
    → Reviews security aspects
 ```
 
-### Quality Gate Flow
+### Quality Assurance Flow
 
-For pre-release audits:
+For post-implementation quality verification:
 
 ```
-1. @blue-app-quality-gate-keeper
+1. @blue-implementation-review-coordinator
+   → Coordinates comprehensive review
+   → Manages feedback loops
+
+2. Delegates to @blue-app-quality-gate-keeper
    → Determines relevant audits
-   → Coordinates specialists
+   → Coordinates specialist reviews:
+     • @blue-frontend-code-reviewer (frontend)
+     • @blue-node-backend-code-reviewer (backend)
+     • @blue-security-specialist (auth, payments)
+     • @blue-performance-specialist (user-facing)
+     • @blue-accessibility-specialist (UI)
+     • @blue-seo-specialist (public pages)
 
-2. Audits (based on context):
-   → @blue-frontend-code-reviewer (frontend)
-   → @blue-node-backend-code-reviewer (Node.js backend)
-   → @blue-security-specialist (auth, payments)
-   → @blue-performance-specialist (user-facing)
-   → @blue-accessibility-specialist (UI)
-   → @blue-seo-specialist (public pages)
+3. Review coordinator analyzes findings
+   → Routes fixes to implementation specialists
+   → Re-audits after fixes
+   → Iterates until quality standards met
 
-3. Consolidated report with pass/fail decision
+4. Final sign-off with quality report
 ```
 
 ### Scaling with Complexity
 
-| Task Complexity    | Typical Agents Involved                               |
-| ------------------ | ----------------------------------------------------- |
-| Simple bug fix     | 1-2 (developer + reviewer)                            |
-| Standard feature   | 3-5 (planner + architect + implementation + reviewer) |
-| Complex feature    | 6-8 (add security, testing specialists)               |
-| Full release audit | 5-7 (quality-gate-keeper + all quality specialists)   |
-| Major refactoring  | 4-6 (strategy-planner + implementation + testing)     |
-| Blockchain dApp    | 5-8 (strategist + architect + devs + security)        |
+| Task Complexity    | Typical Agents Involved                                                |
+| ------------------ | ---------------------------------------------------------------------- |
+| Simple bug fix     | 1-2 (developer + reviewer)                                             |
+| Standard feature   | 4-6 (planner + architect + implementation + review coordinator)        |
+| Complex feature    | 7-9 (add security, testing specialists)                                |
+| Full release audit | 6-8 (review coordinator + quality-gate-keeper + quality specialists)   |
+| Major refactoring  | 5-7 (strategy-planner + implementation + review coordinator + testing) |
+| Blockchain dApp    | 6-9 (strategist + architect + devs + security + review coordinator)    |

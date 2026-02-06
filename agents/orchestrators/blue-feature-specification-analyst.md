@@ -108,10 +108,15 @@ Delegate to @blue-architecture-designer:
 
 [List of tasks with suggested specialist agents]
 
-#### Phase 3: Quality
+#### Phase 3: Quality & Review
 
-- @blue-code-reviewer: Code review
-- [Additional quality gates if needed]
+Delegate to @blue-implementation-review-coordinator:
+
+- Coordinate comprehensive quality audit via quality gate keeper
+- Route feedback to implementation specialists for fixes
+- Manage review-fix-verify cycles
+- Ensure all quality standards are met
+- Provide final sign-off
 
 ### Out of Scope
 
@@ -129,34 +134,34 @@ Delegate to @blue-architecture-designer:
 
 ### Specialist Agent Selection
 
-| Agent                            | Delegate When                     |
-| -------------------------------- | --------------------------------- |
-| `@blue-architecture-designer`    | Technical strategy needed         |
-| `@blue-react-developer`          | React component implementation    |
-| `@blue-state-management-expert`  | Complex state handling            |
-| `@blue-ui-styling-specialist`    | Styling and visual implementation |
-| `@blue-api-integration-expert`   | API calls, data fetching          |
-| `@blue-code-reviewer`            | Quality review needed             |
-| `@blue-accessibility-specialist` | A11y compliance required          |
-| `@blue-unit-testing-specialist`  | Unit tests needed                 |
-| `@blue-e2e-testing-specialist`   | Integration/E2E tests needed      |
-| `@blue-performance-specialist`   | Performance optimization          |
-| `@blue-security-specialist`      | Security-sensitive features       |
+| Agent                                     | Delegate When                     |
+| ----------------------------------------- | --------------------------------- |
+| `@blue-architecture-designer`             | Technical strategy needed         |
+| `@blue-react-developer`                   | React component implementation    |
+| `@blue-state-management-expert`           | Complex state handling            |
+| `@blue-ui-styling-specialist`             | Styling and visual implementation |
+| `@blue-api-integration-expert`            | API calls, data fetching          |
+| `@blue-implementation-review-coordinator` | Quality review and verification   |
+| `@blue-accessibility-specialist`          | A11y compliance required          |
+| `@blue-unit-testing-specialist`           | Unit tests needed                 |
+| `@blue-e2e-testing-specialist`            | Integration/E2E tests needed      |
+| `@blue-performance-specialist`            | Performance optimization          |
+| `@blue-security-specialist`               | Security-sensitive features       |
 
 ### Scaling with Complexity
 
 **Simple task** (1-2 specialists):
 
-- Bug fix: react-developer + reviewer
-- Small UI change: ui-styling + reviewer
+- Bug fix: react-developer + implementation-review-coordinator (quick review)
+- Small UI change: ui-styling + implementation-review-coordinator
 
-**Standard feature** (3-5 specialists):
+**Standard feature** (4-6 specialists):
 
-- New component: architecture + react + state + ui + reviewer
+- New component: architecture + react + state + ui + implementation-review-coordinator
 
-**Complex feature** (5-8 specialists):
+**Complex feature** (6-9 specialists):
 
-- Add security, testing, performance as needed
+- Add security, testing, performance specialists + comprehensive review coordination
 
 ## Key Principles
 

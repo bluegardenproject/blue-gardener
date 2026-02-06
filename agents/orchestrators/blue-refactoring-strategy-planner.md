@@ -132,6 +132,12 @@ Before creating a refactoring plan, investigate:
 
 - [Testing tasks to verify behavior preservation]
 
+#### For @blue-implementation-review-coordinator:
+
+- Quality verification after each phase
+- Ensure no regressions introduced
+- Verify behavior preservation
+
 #### For main agent:
 
 - [Tasks that don't need specialists]

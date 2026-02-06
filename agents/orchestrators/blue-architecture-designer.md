@@ -143,6 +143,10 @@ interface FeatureState {
 
 - [Tasks that don't need specialists]
 
+### Quality Assurance
+
+**Quality Review:** After implementation, delegate to `@blue-implementation-review-coordinator` for comprehensive quality verification with feedback loops.
+
 ### Technical Decisions Log
 
 | Decision | Choice   | Rationale |
@@ -246,6 +250,14 @@ CheckoutPage/
 #### For main agent:
 - Stripe Elements integration (follows Stripe docs)
 - Connect to existing cart Redux slice
+
+### Quality Assurance
+
+**Quality Review:** After implementation, delegate to `@blue-implementation-review-coordinator` for:
+- Security audit (payment handling is critical)
+- Code quality review
+- Performance verification
+- Accessibility compliance
 
 ### Technical Decisions Log
 | Decision | Choice | Rationale |
