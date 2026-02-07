@@ -6,7 +6,7 @@ hero:
   text: Multi-Platform AI Agent Management
   tagline: Install, manage, and sync specialized AI coding agents across 6 platforms
   image:
-    src: /logo.svg
+    src: /blue-gardener-logo.png
     alt: Blue Gardener
   actions:
     - theme: brand

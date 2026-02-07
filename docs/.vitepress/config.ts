@@ -6,10 +6,39 @@ export default defineConfig({
     "Multi-platform AI agent management for Cursor, Claude Desktop, Codex, GitHub Copilot, Windsurf, and OpenCode",
   base: "/blue-gardener/",
 
-  head: [["link", { rel: "icon", href: "/blue-gardener/favicon.ico" }]],
+  head: [
+    ["link", { rel: "icon", href: "/blue-gardener/favicon.ico" }],
+    [
+      "link",
+      {
+        rel: "apple-touch-icon",
+        sizes: "180x180",
+        href: "/blue-gardener/apple-touch-icon.png",
+      },
+    ],
+    [
+      "link",
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        href: "/blue-gardener/favicon-32x32.png",
+      },
+    ],
+    [
+      "link",
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "16x16",
+        href: "/blue-gardener/favicon-16x16.png",
+      },
+    ],
+    ["link", { rel: "manifest", href: "/blue-gardener/site.webmanifest" }],
+  ],
 
   themeConfig: {
-    logo: "/logo.svg",
+    logo: "/blue-gardener-logo.png",
 
     nav: [
       { text: "Guide", link: "/guide/getting-started" },
