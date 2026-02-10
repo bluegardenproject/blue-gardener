@@ -1,0 +1,46 @@
+---
+description: Use examples carefully in agent/subagent/skill prompts to avoid anchoring and bias. Prefer templates and multiple variants.
+globs:
+  - agents/**/*.md
+  - skills/**/SKILL.md
+  - .cursor/agents/**/*.md
+  - .cursor/skills/**/SKILL.md
+alwaysApply: false
+---
+
+# Examples in agent/subagent/skill prompts
+
+Examples improve quality only when they teach **generalizable structure**, not when they anchor behavior to a specific stack or solution.
+
+## Use examples when they improve general output quality
+
+- Show the **shape of an output** (schemas, checklists, handoff formats, severity labels)
+- Demonstrate **edge case handling** patterns (but keep them stack-neutral)
+- Illustrate **decision criteria** (how to choose between alternatives)
+
+## Avoid examples that introduce anchoring/bias
+
+- Don’t include a single specific “pet” example (e.g., one library migration) unless the agent/skill is explicitly about that exact tech.
+- Don’t bake in framework assumptions (React, Next.js, Node, etc.) unless the scope is explicitly restricted.
+- Don’t turn examples into “copy these exact steps” playbooks; keep them illustrative.
+
+## Preferred pattern: templates + variants
+
+- Prefer **parameterized templates** with placeholders (`<SourceLib>`, `<TargetLib>`, `<Framework>`, `<Constraints>`).
+- If you include concrete examples, include **2–3 diverse variants** so no single one becomes the default.
+- Clearly label examples as **illustrative**, and require the agent to confirm the project context first.
+
+## Keep examples short and isolated
+
+- Keep examples minimal in the main prompt.
+- For skills, put detailed examples in `references/` files and refer to them (progressive disclosure).
+
+## Good vs bad
+
+**Bad (anchoring):**
+
+- “Here’s how to migrate Jotai → Redux in our app…” (becomes the default strategy even when irrelevant)
+
+**Good (generalizable):**
+
+- “Migration plan template:\n  - Inventory current state usage\n  - Define target architecture\n  - Create phased rollout + rollback\n  - Execute changes\n  - Run quality gate + tests\n  - Verify acceptance criteria”

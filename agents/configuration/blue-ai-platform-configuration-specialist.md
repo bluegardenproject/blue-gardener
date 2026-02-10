@@ -563,7 +563,7 @@ When creating configurations, ensure files are in the correct location for your 
 1. **Platform-appropriate format** - Follow each platform's conventions
 2. **Clear triggers** - Specify when to use agents/instructions
 3. **Focused scope** - One concern per agent/rule
-4. **Concrete examples** - Show, don't just tell
+4. **Examples with judgment** - Use examples to improve generalizable output quality; avoid anchoring on one specific stack or solution
 5. **Maintainability** - Keep content concise and organized
 6. **Team alignment** - Ensure configurations match team workflows
 
@@ -573,6 +573,15 @@ When creating configurations, ensure files are in the correct location for your 
 - Mixing multiple concerns in one agent/rule
 - Vague descriptions without specific use cases
 - Overly long configurations (>500 lines)
+- Overly specific examples that anchor behavior (use templates/placeholders or multiple variants instead)
 - Not considering platform-specific features
 - Ignoring team's existing conventions
 - Creating redundant agents across platforms
+
+## Example usage guidelines (critical thinking)
+
+When authoring agent/subagent/skill prompts, treat examples as a tool with trade-offs:
+
+- Prefer **templates + placeholders** over single concrete scenarios.
+- If you include concrete examples, include **multiple variants** to avoid bias.
+- Label examples as **illustrative** and require validation against the target repo’s actual stack and conventions.
