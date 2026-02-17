@@ -292,3 +292,31 @@ Learn how agents work together
 
 **[Agent Catalog →](/agents/)**  
 Browse all available agents
+
+## Extending Blue Gardener (project-specific agents, skills, rules)
+
+Blue Gardener’s agents are intentionally generic. Most teams will add project-specific instructions on top.
+
+### Add your own specialists
+
+- Create additional agents in your platform’s native location (e.g. `.cursor/agents/` for Cursor).
+- Keep their scope narrow (one domain, one job) so the orchestration manager can route tasks reliably.
+
+### Stay compatible with orchestration
+
+If you want your custom agents to plug into manager → workers workflows, have them follow the same **handoff contract**:
+
+- End responses with a `## Handoff` section that includes:
+  - **Inputs**
+  - **Assumptions**
+  - **Artifacts** (files changed, commands to run, checklists)
+  - **Done criteria**
+  - **Next workers** (who should run next and why)
+
+This makes it easy for an orchestration manager (or your own commands/workflows) to chain specialists safely.
+
+### Add project rules (and optional platform workflows)
+
+- Use rules for short, persistent conventions (style/architecture constraints).
+- If your platform supports it, you may add project-specific workflows/commands in your app repo (e.g., migrations, release checks). These should be **project-owned**, not shipped by Blue Gardener.
+- Keep examples in prompts **generic and template-like** to avoid anchoring to a single stack unless the agent is explicitly stack-specific.

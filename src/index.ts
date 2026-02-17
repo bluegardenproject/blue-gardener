@@ -9,6 +9,7 @@ import { listCommand } from "./commands/list.js";
 import { syncCommand } from "./commands/sync.js";
 import { repairCommand } from "./commands/repair.js";
 import { searchCommand } from "./commands/search.js";
+import { profilesCommand } from "./commands/profiles.js";
 
 program
   .name("blue-gardener")
@@ -19,7 +20,10 @@ program
 program
   .command("add [agents...]")
   .description("Add one or more agents to your project")
-  .action(addCommand);
+  .option("-p, --profile <profileId>", "Install a preset profile of agents")
+  .action((agents: string[], options: { profile?: string }) =>
+    addCommand(agents, options)
+  );
 
 program
   .command("remove [agents...]")
@@ -46,5 +50,10 @@ program
   .command("repair")
   .description("Repair manifest by re-tracking orphaned agents")
   .action(repairCommand);
+
+program
+  .command("profiles")
+  .description("List available agent install profiles")
+  .action(profilesCommand);
 
 program.parse();

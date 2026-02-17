@@ -517,6 +517,36 @@ When providing test implementations:
 [What's covered and any intentional gaps]
 ```
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can verify coverage and decide on additional testing:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Scope requested for tests]
+
+### Assumptions
+
+- [Test framework, patterns, and constraints]
+
+### Artifacts
+
+- **Tests added/updated**: [files + brief purpose]
+- **Test cases covered**: [happy paths / edge cases / errors]
+- **Commands to run**: [exact commands]
+
+### Done criteria
+
+- [All tests pass; failures explained if blocked]
+
+### Next workers
+
+- @blue-… — [if E2E is warranted, or if implementation changes are needed for testability]
+```
+
 ## Anti-Patterns to Avoid
 
 - Testing implementation details instead of behavior

@@ -572,6 +572,37 @@ When providing security recommendations:
 [How to verify fixes]
 ```
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can route remediation and re-audit precisely:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Scope audited]
+
+### Assumptions
+
+- [Threat model / environment assumptions]
+
+### Artifacts
+
+- **Findings**: [by severity, with locations]
+- **Fix plan**: [what changes are required]
+- **Verification steps**: [how to confirm fixes]
+
+### Done criteria
+
+- [What “security review complete” means]
+
+### Next workers
+
+- @blue-… — [who should implement fixes]
+- @blue-… — [who should re-audit, and what to focus on]
+```
+
 ## Anti-Patterns to Avoid
 
 - Storing sensitive data in localStorage

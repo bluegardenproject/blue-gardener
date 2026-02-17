@@ -158,6 +158,46 @@ flowchart TD
    - Complete quality audit
    - Sign-off
 
+## Recipe: Library/Pattern Migration (e.g., Jotai → Redux)
+
+Use this recipe for any “replace X with Y” migration (state management, routing, API client, logging, etc.). Treat the example names as **parameters**, not defaults.
+
+### Inputs (parameters)
+
+- **Source**: `<SourceLibOrPattern>` (e.g., Jotai)
+- **Target**: `<TargetLibOrPattern>` (e.g., Redux)
+- **Scope**: directories/packages/features in-scope + explicit out-of-scope
+- **Constraints**: timeline, compatibility, risk tolerance
+- **Verification**: what must be proven (typecheck/tests/perf/a11y/security)
+
+### Worker sequence (manager-run)
+
+1. **Strategy**
+   - `@blue-refactoring-strategy-planner`
+   - Output: phased plan with verification + rollback after each phase
+
+2. **Target architecture**
+   - `@blue-architecture-designer`
+   - Output: target architecture + task assignment to specialists
+
+3. **Implementation (parallel where safe)**
+   - `@blue-state-management-expert` (if the migration is state-related)
+   - `@blue-react-developer` (UI/component changes)
+   - `@blue-api-integration-expert` (if the migration touches data fetching/cache)
+   - (Add backend/infra specialists if the migration affects those areas)
+
+4. **Quality gate + iteration**
+   - `@blue-app-quality-gate-keeper` (audit selection + consolidated findings)
+   - `@blue-implementation-review-coordinator` (route fixes, iterate, sign-off)
+
+5. **Optional tests (recommended for high-risk migrations)**
+   - `@blue-unit-testing-specialist`
+   - `@blue-e2e-testing-specialist`
+
+### Platform-agnostic usage
+
+Use the orchestrator agents to produce a plan and then have the **main agent** call the recommended specialist agents in sequence or in parallel (where safe). No platform-specific commands are required.
+
 ### Pattern 4: Backend Development
 
 **Use when:** Building backend services

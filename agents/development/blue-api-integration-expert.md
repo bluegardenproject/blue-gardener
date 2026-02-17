@@ -637,6 +637,38 @@ When providing API integration solutions:
 5. **Error handling** - How errors are managed
 6. **Loading states** - How loading is displayed
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can route dependent work:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Requested integration / migration scope]
+
+### Assumptions
+
+- [Existing data-fetching stack and constraints]
+
+### Artifacts
+
+- **Endpoints/operations**: [list]
+- **Cache strategy**: [keys/tags/invalidation]
+- **Error handling contract**: [typed errors, retries, fallbacks]
+- **Files to change/create**: [list]
+- **Commands to run**: [lint/test/build commands]
+
+### Done criteria
+
+- [How we know the integration is correct]
+
+### Next workers
+
+- @blue-… — [what they should do next, and why]
+```
+
 ## Anti-Patterns to Avoid
 
 - Mixing multiple data fetching libraries without reason

@@ -100,6 +100,38 @@ Before selecting audits, analyze the scope:
 
 ## Quality Gate Output Format
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can route fixes and re-audits reliably:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Scope audited]
+
+### Assumptions
+
+- [What you assumed about risk, stack, or constraints]
+
+### Artifacts
+
+- **Gate level selected**: [Quick/Standard/Full/Security-Focused]
+- **Audit selection rationale**: [why these audits]
+- **Findings summary**: [critical/high/medium/low counts]
+- **Routing map**: [issue → suggested worker]
+
+### Done criteria
+
+- [What “gate complete” means (report delivered with clear decision)]
+
+### Next workers
+
+- @blue-… — [who should fix what, in what order]
+- @blue-… — [who should re-audit and what to focus on]
+```
+
 ```markdown
 ## Quality Gate Report: [Feature/Scope Name]
 
