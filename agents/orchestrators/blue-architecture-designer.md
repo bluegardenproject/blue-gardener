@@ -91,6 +91,38 @@ Once confirmed, produce the final architecture document for specialists.
 
 ## Architecture Output Format
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can route implementation and verification cleanly:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Spec / goal you designed for]
+
+### Assumptions
+
+- [Stack, constraints, and “existing patterns” assumptions]
+
+### Artifacts
+
+- **Architecture decisions**: [key decisions + rationale]
+- **Component/data flow**: [high-level]
+- **Implementation tasks**: [by worker role]
+- **Quality risks**: [areas needing special verification]
+
+### Done criteria
+
+- [What “architecture complete” means]
+
+### Next workers
+
+- @blue-… — [who should implement which parts]
+- @blue-… — [who should run quality gates and what to focus on]
+```
+
 ```markdown
 ## Technical Architecture: [Feature Name]
 

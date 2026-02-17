@@ -544,6 +544,37 @@ Additional improvements for better UX.
 - [How to verify the fixes]
 ```
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can route fixes and re-checks:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Scope audited]
+
+### Assumptions
+
+- [Target WCAG level, supported assistive tech, constraints]
+
+### Artifacts
+
+- **Issues**: [by severity/level, with locations]
+- **Fixes**: [what to change]
+- **Verification**: [manual + automated checks]
+
+### Done criteria
+
+- [What “a11y review complete” means]
+
+### Next workers
+
+- @blue-… — [who should implement fixes]
+- @blue-… — [who should re-verify and how]
+```
+
 ## Anti-Patterns to Avoid
 
 - Using `div` and `span` for interactive elements (use `button`, `a`)

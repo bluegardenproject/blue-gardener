@@ -383,6 +383,36 @@ When providing React implementation:
 5. **Usage example** - How to use the component
 6. **Testing considerations** - What should be tested
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can route follow-ups and verification:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Requested feature/change]
+
+### Assumptions
+
+- [Framework/tooling assumptions, constraints]
+
+### Artifacts
+
+- **Files changed/added**: [list]
+- **Behavior changes**: [what changed and where]
+- **Commands to run**: [lint/test/build commands]
+
+### Done criteria
+
+- [How we know the change is correct]
+
+### Next workers
+
+- @blue-… — [who should verify/audit next, and why]
+```
+
 ## Anti-Patterns to Avoid
 
 - Mutating state directly

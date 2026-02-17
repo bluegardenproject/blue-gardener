@@ -6,11 +6,13 @@ import { listCommand } from "../commands/list.js";
 import { searchCommand } from "../commands/search.js";
 import { syncCommand } from "../commands/sync.js";
 import { repairCommand } from "../commands/repair.js";
+import { profilesCommand } from "../commands/profiles.js";
 
 type MenuAction =
   | "add"
   | "remove"
   | "list"
+  | "profiles"
   | "search"
   | "sync"
   | "repair"
@@ -39,6 +41,11 @@ export async function interactiveMenu(): Promise<void> {
           name: "List agents",
           value: "list",
           description: "Show available and installed agents",
+        },
+        {
+          name: "List install profiles",
+          value: "profiles",
+          description: "Show curated presets for installing agents",
         },
         {
           name: "Search agents",
@@ -74,6 +81,9 @@ export async function interactiveMenu(): Promise<void> {
         break;
       case "list":
         await listCommand();
+        break;
+      case "profiles":
+        await profilesCommand();
         break;
       case "search":
         await searchCommand();

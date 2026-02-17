@@ -569,6 +569,37 @@ When providing E2E test implementations:
 [How tests run in pipeline]
 ```
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can verify coverage and route stabilization work:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Flow(s) requested for E2E coverage]
+
+### Assumptions
+
+- [E2E framework, environment, test data constraints]
+
+### Artifacts
+
+- **Tests added/updated**: [files + brief purpose]
+- **Fixtures/test data**: [how data is created or mocked]
+- **Commands to run**: [exact commands]
+- **CI notes**: [how to run reliably in CI]
+
+### Done criteria
+
+- [Tests pass locally and in CI (or known blockers documented)]
+
+### Next workers
+
+- @blue-… — [if flakiness/perf/security/a11y follow-up is needed]
+```
+
 ## Anti-Patterns to Avoid
 
 - Testing implementation details instead of user behavior

@@ -7,6 +7,7 @@ import {
   getCategories,
   getAgentsByCategory,
 } from "../lib/agents.js";
+import { getProfiles, getProfile } from "../lib/profiles.js";
 import {
   detectPlatform,
   promptForPlatform,
@@ -18,7 +19,10 @@ import {
   updatePlatform,
 } from "../lib/manifest.js";
 
-export async function addCommand(agents?: string[]): Promise<void> {
+export async function addCommand(
+  agents?: string[],
+  options?: { profile?: string }
+): Promise<void> {
   const availableAgents = getAvailableAgents();
   const installedAgents = getInstalledAgents();
   const installedNames = installedAgents.map((a) => a.name);
@@ -40,7 +44,46 @@ export async function addCommand(agents?: string[]): Promise<void> {
 
   let agentsToInstall: string[];
 
-  if (agents && agents.length > 0) {
+  if (options?.profile) {
+    const profile = getProfile(options.profile);
+    if (!profile) {
+      console.log(
+        chalk.yellow(
+          `Unknown profile: ${options.profile}. Run "npx blue-gardener profiles" to see available profiles.`
+        )
+      );
+      return;
+    }
+
+    const requested = profile.agentNames;
+    const known = requested.filter((name) =>
+      availableAgents.some((a) => a.name === name)
+    );
+    const missing = requested.filter(
+      (name) => !availableAgents.some((a) => a.name === name)
+    );
+
+    if (missing.length > 0) {
+      console.log(
+        chalk.yellow(
+          `Profile contains unknown agents (skipping): ${missing.join(", ")}`
+        )
+      );
+    }
+
+    agentsToInstall = known.filter((name) =>
+      notInstalled.some((a) => a.name === name)
+    );
+
+    const alreadyInstalled = known.filter((name) =>
+      installedNames.includes(name)
+    );
+    if (alreadyInstalled.length > 0) {
+      console.log(
+        chalk.dim(`Already installed (profile): ${alreadyInstalled.join(", ")}`)
+      );
+    }
+  } else if (agents && agents.length > 0) {
     // Use provided agent names
     agentsToInstall = agents.filter((name) =>
       notInstalled.some((a) => a.name === name)
@@ -62,40 +105,91 @@ export async function addCommand(agents?: string[]): Promise<void> {
       );
     }
   } else {
-    // Interactive selection with categories
-    const categories = getCategories();
-
-    // Step 1: Select category
-    const selectedCategory = await select({
-      message: "Select a category:",
-      choices: categories.map((cat) => ({
-        name: `${cat.name} (${cat.count} ${cat.count === 1 ? "agent" : "agents"})`,
-        value: cat.id,
-      })),
+    // Interactive selection: profile vs category
+    const installMode = await select({
+      message: "Install agents by:",
+      choices: [
+        {
+          name: "Profile preset (recommended)",
+          value: "profile",
+          description: "Install a curated set of agents for a project type",
+        },
+        {
+          name: "Category browse",
+          value: "category",
+          description: "Pick individual agents from a category",
+        },
+      ],
     });
 
-    // Step 2: Select agents from category
-    const categoryAgents = getAgentsByCategory(selectedCategory).filter((a) =>
-      notInstalled.some((na) => na.name === a.name)
-    );
+    if (installMode === "profile") {
+      const profiles = getProfiles();
+      const selectedProfileId = await select({
+        message: "Select a profile:",
+        choices: profiles.map((p) => ({
+          name: `${p.name} (${p.agentNames.length} agents)`,
+          value: p.id,
+          description: p.description,
+        })),
+      });
 
-    if (categoryAgents.length === 0) {
-      console.log(
-        chalk.green(
-          `All agents in ${selectedCategory} category are already installed.`
-        )
+      const profile = getProfile(selectedProfileId)!;
+      const profileAgents = profile.agentNames
+        .map((name) => availableAgents.find((a) => a.name === name))
+        .filter(Boolean)
+        .filter((a) => notInstalled.some((na) => na.name === a!.name));
+
+      if (profileAgents.length === 0) {
+        console.log(
+          chalk.green(`All agents in "${profile.name}" are already installed.`)
+        );
+        return;
+      }
+
+      agentsToInstall = await checkbox({
+        message: `Select agents to install (${profile.name}):`,
+        choices: profileAgents.map((agent) => ({
+          name: agent!.name,
+          value: agent!.name,
+          description: agent!.description,
+        })),
+      });
+    } else {
+      // Category browse
+      const categories = getCategories();
+
+      // Step 1: Select category
+      const selectedCategory = await select({
+        message: "Select a category:",
+        choices: categories.map((cat) => ({
+          name: `${cat.name} (${cat.count} ${cat.count === 1 ? "agent" : "agents"})`,
+          value: cat.id,
+        })),
+      });
+
+      // Step 2: Select agents from category
+      const categoryAgents = getAgentsByCategory(selectedCategory).filter((a) =>
+        notInstalled.some((na) => na.name === a.name)
       );
-      return;
-    }
 
-    agentsToInstall = await checkbox({
-      message: `Select agents to install (${selectedCategory}):`,
-      choices: categoryAgents.map((agent) => ({
-        name: agent.name,
-        value: agent.name,
-        description: agent.description,
-      })),
-    });
+      if (categoryAgents.length === 0) {
+        console.log(
+          chalk.green(
+            `All agents in ${selectedCategory} category are already installed.`
+          )
+        );
+        return;
+      }
+
+      agentsToInstall = await checkbox({
+        message: `Select agents to install (${selectedCategory}):`,
+        choices: categoryAgents.map((agent) => ({
+          name: agent.name,
+          value: agent.name,
+          description: agent.description,
+        })),
+      });
+    }
   }
 
   if (agentsToInstall.length === 0) {

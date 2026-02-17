@@ -379,6 +379,38 @@ This implementation meets all required quality standards and is ready for releas
 [Optional: Low priority improvements for future consideration]
 ```
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can decide whether to continue iteration, re-route fixes, or sign off:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Scope reviewed]
+
+### Assumptions
+
+- [What you assumed about risk level, release bar, constraints]
+
+### Artifacts
+
+- **Iteration status**: [Pass / Continue / Escalate]
+- **Open issues**: [what remains, with priority]
+- **Routing**: [issue → suggested worker]
+- **Re-audit scope**: [what to re-check next]
+
+### Done criteria
+
+- [What “review cycle complete” means]
+
+### Next workers
+
+- @blue-… — [who should fix what next]
+- @blue-… — [who should re-audit and what to focus on]
+```
+
 ## Key Principles
 
 1. **Systematic iteration** - Don't rush; iterate until quality standards are met

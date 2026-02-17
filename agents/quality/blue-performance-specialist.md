@@ -551,6 +551,38 @@ When providing performance recommendations:
 [How to measure improvement]
 ```
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can route implementation work and verify improvements:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Scope analyzed]
+
+### Assumptions
+
+- [Target devices, performance budgets, measurement tools]
+
+### Artifacts
+
+- **Baseline metrics**: [before]
+- **Recommended changes**: [ranked]
+- **Verification plan**: [how to measure after]
+- **Commands/tools**: [what to run]
+
+### Done criteria
+
+- [What “performance pass” means]
+
+### Next workers
+
+- @blue-… — [who should implement which optimizations]
+- @blue-… — [who should re-measure / confirm]
+```
+
 ## Anti-Patterns to Avoid
 
 - Premature optimization (measure first)

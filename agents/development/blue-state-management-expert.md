@@ -515,6 +515,37 @@ When providing state management solutions:
 4. **Integration** - How to connect with components
 5. **Testing considerations** - How to test the state logic
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can verify completion and route follow-ups:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Requested change / migration target]
+
+### Assumptions
+
+- [Project framework + existing state tooling assumptions]
+
+### Artifacts
+
+- **Design decisions**: [store shape, slice boundaries, ownership]
+- **Files to change/create**: [list]
+- **Commands to run**: [lint/test/build commands]
+- **Migration notes**: [coexistence, phased rollout, rollback]
+
+### Done criteria
+
+- [How we know this part is done (types compile, tests pass, no behavior regression)]
+
+### Next workers
+
+- @blue-… — [what they should do next, and why]
+```
+
 ## Anti-Patterns to Avoid
 
 - Mixing multiple global state solutions without reason

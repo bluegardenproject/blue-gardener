@@ -59,6 +59,37 @@ Before creating a refactoring plan, investigate:
 
 ## Refactoring Strategy Output Format
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can route the next steps reliably:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [What you were asked to plan]
+
+### Assumptions
+
+- [Any assumptions you made that must be validated]
+
+### Artifacts
+
+- **Phases**: [Phase 1/2/3 titles + goals]
+- **Files/areas impacted**: [high-level list]
+- **Verification plan**: [how to verify each phase]
+- **Rollback plan**: [how to revert safely]
+
+### Done criteria
+
+- [What “strategy is complete” means]
+
+### Next workers
+
+- @blue-… — [what they should do next, and why]
+```
+
 ```markdown
 ## Refactoring Strategy: [Migration Name]
 

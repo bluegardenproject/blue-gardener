@@ -72,6 +72,37 @@ Please clarify these so I can create a complete specification.
 
 After gathering requirements, produce a structured specification:
 
+## Orchestration Handoff (required)
+
+When you are used as a **worker** in a manager → workers workflow, end your response with this exact section so the manager can delegate implementation and quality work reliably:
+
+```markdown
+## Handoff
+
+### Inputs
+
+- [Original user request / goal]
+
+### Assumptions
+
+- [Any assumptions you made that must be confirmed]
+
+### Artifacts
+
+- **Specification**: [what you produced]
+- **Acceptance criteria**: [checklist]
+- **Scope boundaries**: [in-scope / out-of-scope]
+
+### Done criteria
+
+- [What “spec complete” means]
+
+### Next workers
+
+- @blue-… — [architecture/planning next step]
+- @blue-… — [implementation specialists likely needed]
+```
+
 ```markdown
 ## Feature Specification: [Feature Name]
 
