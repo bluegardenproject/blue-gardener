@@ -7,6 +7,7 @@ import { searchCommand } from "../commands/search.js";
 import { syncCommand } from "../commands/sync.js";
 import { repairCommand } from "../commands/repair.js";
 import { profilesCommand } from "../commands/profiles.js";
+import { platformAddCommand } from "../commands/platform.js";
 
 type MenuAction =
   | "add"
@@ -16,6 +17,7 @@ type MenuAction =
   | "search"
   | "sync"
   | "repair"
+  | "platform"
   | "exit";
 
 export async function interactiveMenu(): Promise<void> {
@@ -58,6 +60,11 @@ export async function interactiveMenu(): Promise<void> {
           description: "Update installed agents to latest version",
         },
         {
+          name: "Add platform",
+          value: "platform",
+          description: "Enable another platform and sync existing agents",
+        },
+        {
           name: "Repair manifest",
           value: "repair",
           description: "Fix issues with manifest or orphaned agents",
@@ -93,6 +100,9 @@ export async function interactiveMenu(): Promise<void> {
         break;
       case "repair":
         await repairCommand();
+        break;
+      case "platform":
+        await platformAddCommand();
         break;
       case "exit":
         console.log(chalk.blue("Goodbye! 🌱\n"));

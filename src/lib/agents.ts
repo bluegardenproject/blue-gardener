@@ -13,7 +13,8 @@ import {
   addAgentToManifest,
   removeAgentFromManifest,
   getInstalledAgentNames,
-  updatePlatform,
+  addPlatformToManifest,
+  getEnabledPlatforms,
 } from "./manifest.js";
 import { Platform, detectPlatform } from "./platform.js";
 import { getAdapter } from "./adapters/index.js";
@@ -42,6 +43,26 @@ function debugLog(message: string): void {
   if (isDebugEnabled()) {
     console.log(chalk.gray(`[debug] ${message}`));
   }
+}
+
+function resolvePlatformsFromManifest(
+  manifest: ReturnType<typeof readManifest>
+): Platform[] {
+  const enabled = getEnabledPlatforms(manifest);
+  if (enabled.length > 0) {
+    return enabled;
+  }
+
+  const detected = detectPlatform();
+  if (detected) {
+    return [detected];
+  }
+
+  return ["cursor"];
+}
+
+function dedupePlatforms(platforms: Platform[]): Platform[] {
+  return Array.from(new Set(platforms));
 }
 
 export interface AgentInfo {
@@ -226,30 +247,31 @@ export function installAgent(agentName: string, platform?: Platform): boolean {
     return false;
   }
 
-  // Get platform from manifest or parameter
+  // Resolve target platform(s)
   let manifest = readManifest();
-  const targetPlatform =
-    platform || manifest?.platform || detectPlatform() || "cursor";
+  const targetPlatforms = dedupePlatforms(
+    platform ? [platform] : resolvePlatformsFromManifest(manifest)
+  );
 
-  // Get adapter for platform
-  const adapter = getAdapter(targetPlatform);
+  // Install agent across all target platforms
+  for (const targetPlatform of targetPlatforms) {
+    const adapter = getAdapter(targetPlatform);
+    ensureProjectAgentsDir(targetPlatform);
 
-  // Ensure directory exists
-  ensureProjectAgentsDir(targetPlatform);
-
-  // Install agent using adapter
-  try {
-    adapter.installAgent(agentName, agent);
-  } catch (error) {
-    debugLog(`Failed to install ${agentName}: ${error}`);
-    return false;
+    try {
+      adapter.installAgent(agentName, agent);
+    } catch (error) {
+      debugLog(`Failed to install ${agentName} on ${targetPlatform}: ${error}`);
+      return false;
+    }
   }
 
   // Update manifest
   if (!manifest) {
-    manifest = createManifest(PACKAGE_VERSION, targetPlatform);
-  } else if (!manifest.platform) {
-    manifest = updatePlatform(manifest, targetPlatform);
+    manifest = createManifest(PACKAGE_VERSION);
+  }
+  for (const targetPlatform of targetPlatforms) {
+    manifest = addPlatformToManifest(manifest, targetPlatform);
   }
   manifest = addAgentToManifest(manifest, agentName, PACKAGE_VERSION);
   writeManifest(manifest);
@@ -266,20 +288,22 @@ export function removeAgent(agentName: string): boolean {
     return false;
   }
 
-  // Get platform from manifest
-  const platform = manifest.platform || detectPlatform() || "cursor";
-  const adapter = getAdapter(platform);
+  // Remove from all enabled platforms
+  const platforms = resolvePlatformsFromManifest(manifest);
 
   // Find the agent info
   const availableAgents = getAvailableAgents();
   const agent = availableAgents.find((a) => a.name === agentName);
 
   if (agent) {
-    try {
-      adapter.removeAgent(agentName, agent);
-    } catch (error) {
-      debugLog(`Failed to remove ${agentName}: ${error}`);
-      return false;
+    for (const platform of platforms) {
+      const adapter = getAdapter(platform);
+      try {
+        adapter.removeAgent(agentName, agent);
+      } catch (error) {
+        debugLog(`Failed to remove ${agentName} from ${platform}: ${error}`);
+        return false;
+      }
     }
   }
 
@@ -299,12 +323,10 @@ export function syncAgents(): { synced: string[]; failed: string[] } {
     return { synced: [], failed: [] };
   }
 
-  // Get platform from manifest
-  const platform = manifest.platform || detectPlatform() || "cursor";
-  const adapter = getAdapter(platform);
+  const platforms = resolvePlatformsFromManifest(manifest);
 
-  const synced: string[] = [];
-  const failed: string[] = [];
+  const syncedSet = new Set<string>();
+  const failedSet = new Set<string>();
 
   // Get installed agents info
   const availableAgents = getAvailableAgents();
@@ -315,31 +337,43 @@ export function syncAgents(): { synced: string[]; failed: string[] } {
     if (agent) {
       installedAgents.push(agent);
     } else {
-      failed.push(agentName);
+      failedSet.add(agentName);
     }
   }
 
-  if (adapter.isSingleFile) {
-    // Single-file platforms: regenerate entire file
-    try {
-      adapter.syncAgents(installedAgents);
-      synced.push(...installedAgents.map((a) => a.name));
-    } catch (error) {
-      debugLog(`Failed to sync agents: ${error}`);
-      failed.push(...installedAgents.map((a) => a.name));
-    }
-  } else {
-    // Multi-file platforms: update each file individually
-    for (const agent of installedAgents) {
+  for (const platform of platforms) {
+    const adapter = getAdapter(platform);
+    ensureProjectAgentsDir(platform);
+
+    if (adapter.isSingleFile) {
+      // Single-file platforms: regenerate entire file
       try {
-        adapter.installAgent(agent.name, agent);
-        synced.push(agent.name);
+        adapter.syncAgents(installedAgents);
+        for (const agent of installedAgents) {
+          syncedSet.add(agent.name);
+        }
       } catch (error) {
-        debugLog(`Failed to sync ${agent.name}: ${error}`);
-        failed.push(agent.name);
+        debugLog(`Failed to sync agents for ${platform}: ${error}`);
+        for (const agent of installedAgents) {
+          failedSet.add(agent.name);
+        }
+      }
+    } else {
+      // Multi-file platforms: update each file individually
+      for (const agent of installedAgents) {
+        try {
+          adapter.installAgent(agent.name, agent);
+          syncedSet.add(agent.name);
+        } catch (error) {
+          debugLog(`Failed to sync ${agent.name} for ${platform}: ${error}`);
+          failedSet.add(agent.name);
+        }
       }
     }
   }
+
+  const synced = Array.from(syncedSet).filter((name) => !failedSet.has(name));
+  const failed = Array.from(failedSet);
 
   // Update manifest version
   if (synced.length > 0) {
@@ -351,6 +385,78 @@ export function syncAgents(): { synced: string[]; failed: string[] } {
   }
 
   return { synced, failed };
+}
+
+/**
+ * Add a platform and sync existing installed agents to it.
+ */
+export function addPlatformAndSyncAgents(platform: Platform): {
+  added: boolean;
+  alreadyEnabled: boolean;
+  synced: string[];
+  failed: string[];
+} {
+  let manifest = readManifest();
+
+  if (!manifest) {
+    manifest = createManifest(PACKAGE_VERSION);
+  }
+
+  const enabledPlatforms = getEnabledPlatforms(manifest);
+  if (enabledPlatforms.includes(platform)) {
+    return { added: false, alreadyEnabled: true, synced: [], failed: [] };
+  }
+
+  manifest = addPlatformToManifest(manifest, platform);
+  writeManifest(manifest);
+
+  const availableAgents = getAvailableAgents();
+  const installedAgentNames = Object.keys(manifest.agents);
+  const adapter = getAdapter(platform);
+  ensureProjectAgentsDir(platform);
+
+  const synced: string[] = [];
+  const failed: string[] = [];
+
+  if (adapter.isSingleFile) {
+    const installedAgents = installedAgentNames
+      .map((name) => availableAgents.find((agent) => agent.name === name))
+      .filter((agent): agent is AgentInfo => Boolean(agent));
+
+    for (const agentName of installedAgentNames) {
+      if (!installedAgents.some((agent) => agent.name === agentName)) {
+        failed.push(agentName);
+      }
+    }
+
+    try {
+      adapter.syncAgents(installedAgents);
+      synced.push(...installedAgents.map((agent) => agent.name));
+    } catch (error) {
+      debugLog(`Failed to sync agents for ${platform}: ${error}`);
+      failed.push(...installedAgents.map((agent) => agent.name));
+    }
+  } else {
+    for (const agentName of installedAgentNames) {
+      const agent = availableAgents.find(
+        (candidate) => candidate.name === agentName
+      );
+      if (!agent) {
+        failed.push(agentName);
+        continue;
+      }
+
+      try {
+        adapter.installAgent(agentName, agent);
+        synced.push(agentName);
+      } catch (error) {
+        debugLog(`Failed to install ${agentName} on ${platform}: ${error}`);
+        failed.push(agentName);
+      }
+    }
+  }
+
+  return { added: true, alreadyEnabled: false, synced, failed };
 }
 
 /**

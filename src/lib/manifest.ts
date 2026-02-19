@@ -11,7 +11,9 @@ export interface Manifest {
   _comment?: string;
   version: string;
   installedAt: string;
+  /** @deprecated Use platforms instead. */
   platform?: Platform;
+  platforms: Platform[];
   agents: Record<string, AgentEntry>;
 }
 
@@ -26,7 +28,7 @@ export function readManifest(): Manifest | null {
 
   if (fs.existsSync(manifestPath)) {
     const content = fs.readFileSync(manifestPath, "utf-8");
-    return JSON.parse(content) as Manifest;
+    return normalizeManifest(JSON.parse(content) as Manifest);
   }
 
   return null;
@@ -38,10 +40,11 @@ export function readManifest(): Manifest | null {
 export function writeManifest(manifest: Manifest): void {
   ensureProjectAgentsDir();
   const manifestPath = getManifestPath();
+  const normalizedManifest = normalizeManifest(manifest);
   // Ensure comment is always present
   const manifestWithComment = {
     _comment: MANIFEST_COMMENT,
-    ...manifest,
+    ...normalizedManifest,
   };
   fs.writeFileSync(
     manifestPath,
@@ -58,21 +61,55 @@ export function createManifest(version: string, platform?: Platform): Manifest {
     version,
     installedAt: new Date().toISOString(),
     platform,
+    platforms: platform ? [platform] : [],
     agents: {},
   };
 }
 
 /**
- * Update platform in manifest
+ * Normalize manifest to current schema.
  */
-export function updatePlatform(
+export function normalizeManifest(manifest: Manifest): Manifest {
+  const platforms = Array.isArray(manifest.platforms)
+    ? manifest.platforms
+    : manifest.platform
+      ? [manifest.platform]
+      : [];
+  const dedupedPlatforms = Array.from(new Set(platforms));
+
+  return {
+    ...manifest,
+    platform: dedupedPlatforms[0],
+    platforms: dedupedPlatforms,
+  };
+}
+
+/**
+ * Add a platform to manifest if missing.
+ */
+export function addPlatformToManifest(
   manifest: Manifest,
   platform: Platform
 ): Manifest {
-  return {
-    ...manifest,
-    platform,
-  };
+  const normalized = normalizeManifest(manifest);
+  if (normalized.platforms.includes(platform)) {
+    return normalized;
+  }
+
+  return normalizeManifest({
+    ...normalized,
+    platforms: [...normalized.platforms, platform],
+  });
+}
+
+/**
+ * Get enabled platforms from manifest.
+ */
+export function getEnabledPlatforms(manifest: Manifest | null): Platform[] {
+  if (!manifest) {
+    return [];
+  }
+  return normalizeManifest(manifest).platforms;
 }
 
 /**

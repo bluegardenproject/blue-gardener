@@ -84,16 +84,45 @@ export function detectPlatform(): Platform | null {
 }
 
 /**
+ * Parse platform from user input.
+ */
+export function parsePlatform(value: string): Platform | null {
+  if (PLATFORMS.some((platform) => platform.id === value)) {
+    return value as Platform;
+  }
+  return null;
+}
+
+/**
+ * Get platforms that can still be added.
+ */
+export function getAvailablePlatformsToAdd(
+  enabled: Platform[]
+): PlatformInfo[] {
+  return PLATFORMS.filter((platform) => !enabled.includes(platform.id));
+}
+
+/**
  * Prompt user to select a platform
  */
-export async function promptForPlatform(): Promise<Platform> {
+export async function promptForPlatform(options?: {
+  exclude?: Platform[];
+  message?: string;
+}): Promise<Platform> {
+  const exclude = options?.exclude ?? [];
+  const choices = PLATFORMS.filter((p) => !exclude.includes(p.id)).map((p) => ({
+    name: p.name,
+    value: p.id,
+    description: p.description,
+  }));
+
+  if (choices.length === 0) {
+    throw new Error("All platforms are already enabled.");
+  }
+
   const platform = await select({
-    message: "Which platform are you using?",
-    choices: PLATFORMS.map((p) => ({
-      name: p.name,
-      value: p.id,
-      description: p.description,
-    })),
+    message: options?.message || "Which platform are you using?",
+    choices,
   });
 
   return platform;
