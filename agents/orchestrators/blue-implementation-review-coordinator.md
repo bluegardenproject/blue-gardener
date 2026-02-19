@@ -255,11 +255,13 @@ Review coordinator:
 
 ### Backend Issues
 
-| Issue Type                 | Route To                                           |
-| -------------------------- | -------------------------------------------------- |
-| Node.js/TypeScript backend | `@blue-node-backend-implementation-specialist`     |
-| Go backend                 | `@blue-go-backend-implementation-specialist`       |
-| Database schema/queries    | Database specialist (relational/document/keyvalue) |
+| Issue Type                           | Route To                                       |
+| ------------------------------------ | ---------------------------------------------- |
+| Node.js/TypeScript backend           | `@blue-node-backend-implementation-specialist` |
+| Go backend                           | `@blue-go-backend-implementation-specialist`   |
+| Database schema/queries (relational) | `@blue-relational-database-specialist`         |
+| Database schema/queries (document)   | `@blue-document-database-specialist`           |
+| Database schema/queries (key-value)  | `@blue-keyvalue-database-specialist`           |
 
 ### Cross-Cutting Issues
 

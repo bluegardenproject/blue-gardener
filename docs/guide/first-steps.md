@@ -101,15 +101,15 @@ Install specific agents by name:
 ::: code-group
 
 ```bash [npm]
-npx blue-gardener add blue-react-developer blue-code-reviewer
+npx blue-gardener add blue-react-developer blue-frontend-code-reviewer
 ```
 
 ```bash [pnpm]
-pnpm blue-gardener add blue-react-developer blue-code-reviewer
+pnpm blue-gardener add blue-react-developer blue-frontend-code-reviewer
 ```
 
 ```bash [yarn]
-yarn blue-gardener add blue-react-developer blue-code-reviewer
+yarn blue-gardener add blue-react-developer blue-frontend-code-reviewer
 ```
 
 :::
