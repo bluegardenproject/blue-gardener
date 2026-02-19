@@ -1,10 +1,10 @@
 {
   "name": "blue-gardener",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CLI tool to manage AI coding agents across multiple platforms - install, remove, and sync specialized AI agents for Cursor, Claude Desktop, Codex, GitHub Copilot, Windsurf, and OpenCode",
   "type": "module",
   "bin": {
-    "blue-gardener": "./dist/index.js"
+    "blue-gardener": "dist/index.js"
   },
   "files": [
     "dist",
@@ -45,7 +45,7 @@
   "homepage": "https://bluegardenproject.github.io/blue-gardener/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bluegardenproject/blue-gardener.git"
+    "url": "git+https://github.com/bluegardenproject/blue-gardener.git"
   },
   "bugs": {
     "url": "https://github.com/bluegardenproject/blue-gardener/issues"

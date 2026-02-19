@@ -31,6 +31,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_BOT_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
@@ -41,8 +42,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "bgp-cli-bot"
+          git config user.email "bgp-cli-bot@users.noreply.github.com"
 
       - name: Upgrade npm
         run: npm install -g npm@latest
@@ -53,4 +54,4 @@ jobs:
       - name: Release
         run: npm run release -- ${{ inputs.version }} --ci
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_BOT_TOKEN }}
