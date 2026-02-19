@@ -10,6 +10,7 @@ import { syncCommand } from "./commands/sync.js";
 import { repairCommand } from "./commands/repair.js";
 import { searchCommand } from "./commands/search.js";
 import { profilesCommand } from "./commands/profiles.js";
+import { platformAddCommand } from "./commands/platform.js";
 
 program
   .name("blue-gardener")
@@ -21,8 +22,13 @@ program
   .command("add [agents...]")
   .description("Add one or more agents to your project")
   .option("-p, --profile <profileId>", "Install a preset profile of agents")
-  .action((agents: string[], options: { profile?: string }) =>
-    addCommand(agents, options)
+  .option(
+    "--platform <platform>",
+    "Enable a platform and sync existing agents before install"
+  )
+  .action(
+    (agents: string[], options: { profile?: string; platform?: string }) =>
+      addCommand(agents, options)
   );
 
 program
@@ -55,5 +61,10 @@ program
   .command("profiles")
   .description("List available agent install profiles")
   .action(profilesCommand);
+
+program
+  .command("platform add [platform]")
+  .description("Add a platform and sync existing agents to it")
+  .action(platformAddCommand);
 
 program.parse();
