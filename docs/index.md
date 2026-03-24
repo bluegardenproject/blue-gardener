@@ -24,7 +24,7 @@ features:
     title: Multi-Platform Support
     details: Works with Cursor, Claude Desktop, Codex, GitHub Copilot, Windsurf, and OpenCode
   - icon: 🤖
-    title: 44 Specialized Agents
+    title: 47 Specialized Agents
     details: Orchestrators, development specialists, quality experts, infrastructure tools, and blockchain specialists
   - icon: 🔄
     title: Auto-Sync
@@ -82,7 +82,7 @@ yarn blue-gardener
 
 Blue Gardener is a CLI tool that manages AI coding agents across multiple platforms. It provides:
 
-- **44 specialized agents** covering orchestration, development, quality, infrastructure, and blockchain
+- **47 specialized agents** covering orchestration, development, quality, infrastructure, and blockchain
 - **Platform adapters** that work with 6 different AI coding platforms
 - **Category-based selection** for easy discovery
 - **Auto-sync** to keep agents updated

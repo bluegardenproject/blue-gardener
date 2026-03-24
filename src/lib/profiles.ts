@@ -6,7 +6,7 @@ export interface AgentProfile {
 }
 
 /**
- * Install profiles/presets help teams avoid installing 44 agents at once.
+ * Install profiles/presets help teams avoid installing 47 agents at once.
  * Profiles are intentionally opinionated defaults. Teams can add/remove agents as needed.
  */
 export const AGENT_PROFILES: AgentProfile[] = [

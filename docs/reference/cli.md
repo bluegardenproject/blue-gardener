@@ -196,7 +196,7 @@ Installed agents (3):
   blue-frontend-code-reviewer (quality)
   blue-accessibility-specialist (quality)
 
-Available agents: 44
+Available agents: 47
 ```
 
 ### search

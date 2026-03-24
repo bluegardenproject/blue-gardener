@@ -2,9 +2,14 @@
 
 Code quality, testing, and optimization experts ensuring high standards.
 
-**Total:** 9 agents
+**Total:** 11 agents
 
 [← Back to Agent Catalog](/agents/)
+
+## Refactoring analysis and verification
+
+- **blue-codebase-analyst** - Pre-refactor Code Inventory (edge cases, data flow, coupling)
+- **blue-refactoring-verification-specialist** - Behavior preservation: coverage matrix vs. Code Inventory; phase gates
 
 ## Code Review
 

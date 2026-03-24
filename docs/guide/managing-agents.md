@@ -34,7 +34,7 @@ Installed agents (5):
   blue-accessibility-specialist (quality)
   blue-feature-specification-analyst (orchestrator)
 
-Available agents: 44
+Available agents: 47
 ```
 
 ## Remove Agents
