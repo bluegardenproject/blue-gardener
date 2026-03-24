@@ -1,5 +1,12 @@
 # Changelog
 
+# [0.2.0](https://github.com/bluegardenproject/blue-gardener/compare/v0.1.4...v0.2.0) (2026-03-24)
+
+
+### Features
+
+* add quality and refactor subagents ([4c7f4f3](https://github.com/bluegardenproject/blue-gardener/commit/4c7f4f3042043a924f92082d14f856598746d5aa))
+
 ## 0.1.4 (2026-02-19)
 
 
