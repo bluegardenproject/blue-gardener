@@ -171,7 +171,7 @@ Installed agents (3):
   blue-frontend-code-reviewer (quality)
   blue-accessibility-specialist (quality)
 
-Available agents: 44
+Available agents: 47
 ```
 
 ## Using Agents in Your IDE
@@ -234,4 +234,4 @@ Learn more about finding and adding agents
 Remove, search, sync, and repair agents
 
 **[Agent Catalog →](/agents/)**  
-Browse all 44 available agents
+Browse all 47 available agents

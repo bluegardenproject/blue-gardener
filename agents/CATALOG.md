@@ -2,13 +2,13 @@
 
 Complete list of available agents in Blue Gardener.
 
-**Total: 44 agents**
+**Total: 47 agents**
 
 | Category       | Count |
 | -------------- | ----- |
-| Orchestrators  | 5     |
+| Orchestrators  | 6     |
 | Development    | 9     |
-| Quality        | 9     |
+| Quality        | 11    |
 | Infrastructure | 9     |
 | Configuration  | 1     |
 | Blockchain     | 11    |
@@ -23,7 +23,8 @@ High-level planning and coordination agents that understand the full picture and
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `blue-feature-specification-analyst`     | Product-technical bridge that clarifies requirements, defines acceptance criteria, and creates implementation plans |
 | `blue-architecture-designer`             | Technical strategy specialist for component architecture, data flow, and system integration                         |
-| `blue-refactoring-strategy-planner`      | Strategic planner for large refactoring efforts, migrations, and technical debt reduction                           |
+| `blue-refactoring-strategy-planner`      | Strategic planner for large refactors; analysis-first and verification gates; phased migration plans                |
+| `blue-extraction-boundary-designer`      | Designs package/module boundaries, public APIs, adapters, and migration mapping for extractions                     |
 | `blue-app-quality-gate-keeper`           | Quality gate orchestrator for security, performance, and code quality audits before releases                        |
 | `blue-implementation-review-coordinator` | Post-implementation coordinator that ensures features meet quality standards through iterative review-fix cycles    |
 
@@ -47,17 +48,19 @@ Domain experts for implementation work.
 
 Code quality, testing, and optimization experts.
 
-| Agent                             | Description                                                                     |
-| --------------------------------- | ------------------------------------------------------------------------------- |
-| `blue-frontend-code-reviewer`     | Frontend code quality for JavaScript/TypeScript, React, Vue, and web apps       |
-| `blue-node-backend-code-reviewer` | Node.js/TypeScript backend code quality and best practices                      |
-| `blue-go-backend-code-reviewer`   | Go backend code quality, idioms, and concurrency patterns                       |
-| `blue-accessibility-specialist`   | Accessibility (a11y) expert for WCAG compliance and screen reader support       |
-| `blue-unit-testing-specialist`    | Unit testing with Jest, Vitest, and React Testing Library                       |
-| `blue-e2e-testing-specialist`     | End-to-end testing with Playwright and Cypress                                  |
-| `blue-performance-specialist`     | Performance optimization for bundle size, rendering, and caching                |
-| `blue-security-specialist`        | Frontend security for auth flows, XSS/CSRF prevention, and secure data handling |
-| `blue-seo-specialist`             | SEO optimization for meta tags, structured data, and search engine visibility   |
+| Agent                                      | Description                                                                                             |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `blue-codebase-analyst`                    | Deep pre-refactoring analysis: edge cases, data flow, coupling, extractability; produces Code Inventory |
+| `blue-frontend-code-reviewer`              | Frontend code quality for JavaScript/TypeScript, React, Vue, and web apps                               |
+| `blue-node-backend-code-reviewer`          | Node.js/TypeScript backend code quality and best practices                                              |
+| `blue-go-backend-code-reviewer`            | Go backend code quality, idioms, and concurrency patterns                                               |
+| `blue-accessibility-specialist`            | Accessibility (a11y) expert for WCAG compliance and screen reader support                               |
+| `blue-unit-testing-specialist`             | Unit testing with Jest, Vitest, and React Testing Library                                               |
+| `blue-e2e-testing-specialist`              | End-to-end testing with Playwright and Cypress                                                          |
+| `blue-performance-specialist`              | Performance optimization for bundle size, rendering, and caching                                        |
+| `blue-security-specialist`                 | Frontend security for auth flows, XSS/CSRF prevention, and secure data handling                         |
+| `blue-seo-specialist`                      | SEO optimization for meta tags, structured data, and search engine visibility                           |
+| `blue-refactoring-verification-specialist` | Behavior preservation during refactors: coverage matrix vs. Code Inventory; verification gates          |
 
 ## Infrastructure
 
@@ -192,19 +195,27 @@ For crypto/blockchain projects:
 For large migrations and refactoring:
 
 ```
-1. @blue-refactoring-strategy-planner
-   → Analyzes current state
-   → Creates phased migration plan
-   → Identifies risks
+1. @blue-codebase-analyst
+   → Deep analysis of target code
+   → Produces Code Inventory (edge cases, dependencies, coupling)
 
-2. Phase execution with quality gates:
+2. @blue-extraction-boundary-designer (when extracting a package/module)
+   → Designs boundary and public API
+   → Produces Boundary Specification (adapters, migration mapping)
+   → Skip if not applicable; strategy-only refactors go to step 3
+
+3. @blue-refactoring-strategy-planner
+   → Creates phased migration plan using the artifacts above
+   → Identifies risks and rollback options
+
+4. Phase execution with verification gates:
    → Implementation specialists per phase
-   → @blue-implementation-review-coordinator after each phase
+   → @blue-refactoring-verification-specialist after each phase (coverage matrix vs. Code Inventory)
    → Sign-off before next phase begins
 
-3. Final verification:
+5. Final verification:
    → @blue-implementation-review-coordinator
-   → Comprehensive quality check
+   → @blue-refactoring-verification-specialist (full matrix)
    → @blue-unit-testing-specialist
    → @blue-e2e-testing-specialist
 ```
@@ -262,11 +273,11 @@ For post-implementation quality verification:
 
 ### Scaling with Complexity
 
-| Task Complexity    | Typical Agents Involved                                                |
-| ------------------ | ---------------------------------------------------------------------- |
-| Simple bug fix     | 1-2 (developer + reviewer)                                             |
-| Standard feature   | 4-6 (planner + architect + implementation + review coordinator)        |
-| Complex feature    | 7-9 (add security, testing specialists)                                |
-| Full release audit | 6-8 (review coordinator + quality-gate-keeper + quality specialists)   |
-| Major refactoring  | 5-7 (strategy-planner + implementation + review coordinator + testing) |
-| Blockchain dApp    | 6-9 (strategist + architect + devs + security + review coordinator)    |
+| Task Complexity    | Typical Agents Involved                                                                                           |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| Simple bug fix     | 1-2 (developer + reviewer)                                                                                        |
+| Standard feature   | 4-6 (planner + architect + implementation + review coordinator)                                                   |
+| Complex feature    | 7-9 (add security, testing specialists)                                                                           |
+| Full release audit | 6-8 (review coordinator + quality-gate-keeper + quality specialists)                                              |
+| Major refactoring  | 7-10 (codebase-analyst + boundary designer + strategy-planner + verification + implementation + review + testing) |
+| Blockchain dApp    | 6-9 (strategist + architect + devs + security + review coordinator)                                               |

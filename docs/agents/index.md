@@ -1,19 +1,19 @@
 # Agent Catalog
 
-Complete catalog of all 44 Blue Gardener agents organized by category.
+Complete catalog of all 47 Blue Gardener agents organized by category.
 
 ## Overview
 
 | Category                          | Count | Description                         |
 | --------------------------------- | ----- | ----------------------------------- |
-| [Orchestrators](#orchestrators)   | 5     | Planning and coordination agents    |
+| [Orchestrators](#orchestrators)   | 6     | Planning and coordination agents    |
 | [Development](#development)       | 9     | Implementation specialists          |
-| [Quality](#quality)               | 9     | Code quality and testing experts    |
+| [Quality](#quality)               | 11    | Code quality and testing experts    |
 | [Infrastructure](#infrastructure) | 9     | DevOps and tooling specialists      |
 | [Configuration](#configuration)   | 1     | Platform setup expert               |
 | [Blockchain](#blockchain)         | 11    | Smart contract and Web3 specialists |
 
-**Total: 44 agents**
+**Total: 47 agents**
 
 ## Quick Navigation
 
@@ -70,7 +70,8 @@ High-level planning and coordination agents that understand the full picture and
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `blue-feature-specification-analyst`     | Product-technical bridge that clarifies requirements, defines acceptance criteria, and creates implementation plans |
 | `blue-architecture-designer`             | Technical strategy specialist for component architecture, data flow, and system integration                         |
-| `blue-refactoring-strategy-planner`      | Strategic planner for large refactoring efforts, migrations, and technical debt reduction                           |
+| `blue-refactoring-strategy-planner`      | Strategic planner for large refactors; analysis-first and verification gates; phased migration plans                |
+| `blue-extraction-boundary-designer`      | Designs package/module boundaries, public APIs, adapters, and migration mapping for extractions                     |
 | `blue-app-quality-gate-keeper`           | Quality gate orchestrator for security, performance, and code quality audits before releases                        |
 | `blue-implementation-review-coordinator` | Post-implementation coordinator that ensures features meet quality standards through iterative review-fix cycles    |
 
@@ -98,17 +99,19 @@ Domain experts for implementation work across frontend, backend, and integration
 
 Code quality, testing, and optimization experts ensuring high standards.
 
-| Agent                             | Description                                                                     |
-| --------------------------------- | ------------------------------------------------------------------------------- |
-| `blue-frontend-code-reviewer`     | Frontend code quality for JavaScript/TypeScript, React, Vue, and web apps       |
-| `blue-node-backend-code-reviewer` | Node.js/TypeScript backend code quality and best practices                      |
-| `blue-go-backend-code-reviewer`   | Go backend code quality, idioms, and concurrency patterns                       |
-| `blue-accessibility-specialist`   | Accessibility (a11y) expert for WCAG compliance and screen reader support       |
-| `blue-unit-testing-specialist`    | Unit testing with Jest, Vitest, and React Testing Library                       |
-| `blue-e2e-testing-specialist`     | End-to-end testing with Playwright and Cypress                                  |
-| `blue-performance-specialist`     | Performance optimization for bundle size, rendering, and caching                |
-| `blue-security-specialist`        | Frontend security for auth flows, XSS/CSRF prevention, and secure data handling |
-| `blue-seo-specialist`             | SEO optimization for meta tags, structured data, and search engine visibility   |
+| Agent                                      | Description                                                                                             |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `blue-codebase-analyst`                    | Deep pre-refactoring analysis: edge cases, data flow, coupling, extractability; produces Code Inventory |
+| `blue-frontend-code-reviewer`              | Frontend code quality for JavaScript/TypeScript, React, Vue, and web apps                               |
+| `blue-node-backend-code-reviewer`          | Node.js/TypeScript backend code quality and best practices                                              |
+| `blue-go-backend-code-reviewer`            | Go backend code quality, idioms, and concurrency patterns                                               |
+| `blue-accessibility-specialist`            | Accessibility (a11y) expert for WCAG compliance and screen reader support                               |
+| `blue-unit-testing-specialist`             | Unit testing with Jest, Vitest, and React Testing Library                                               |
+| `blue-e2e-testing-specialist`              | End-to-end testing with Playwright and Cypress                                                          |
+| `blue-performance-specialist`              | Performance optimization for bundle size, rendering, and caching                                        |
+| `blue-security-specialist`                 | Frontend security for auth flows, XSS/CSRF prevention, and secure data handling                         |
+| `blue-seo-specialist`                      | SEO optimization for meta tags, structured data, and search engine visibility                           |
+| `blue-refactoring-verification-specialist` | Behavior preservation during refactors: coverage matrix vs. Code Inventory; verification gates          |
 
 [View quality agents details →](/agents/quality)
 

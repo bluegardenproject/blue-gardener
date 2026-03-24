@@ -17,7 +17,7 @@ Different AI coding platforms use different formats for agents:
 
 Blue Gardener handles all these formats automatically, so you can focus on using agents rather than managing platform differences.
 
-### 44 Specialized Agents
+### 47 Specialized Agents
 
 Blue Gardener includes a comprehensive collection of agents:
 

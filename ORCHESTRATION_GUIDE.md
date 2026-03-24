@@ -6,11 +6,12 @@
 
 Blue Gardener agents work together through orchestration patterns:
 
-### Orchestrators (5 agents)
+### Orchestrators (6 agents)
 
 - `blue-feature-specification-analyst` - Requirements & planning
 - `blue-architecture-designer` - Technical design
 - `blue-refactoring-strategy-planner` - Refactoring strategy
+- `blue-extraction-boundary-designer` - Extraction boundaries & package APIs
 - `blue-app-quality-gate-keeper` - Quality audits
 - `blue-implementation-review-coordinator` - Review coordination
 
@@ -48,4 +49,4 @@ Includes:
 
 **[Agent Catalog →](https://bluegardenproject.github.io/blue-gardener/agents/)**
 
-Browse all 44 agents by category
+Browse all 47 agents by category

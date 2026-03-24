@@ -11,6 +11,7 @@ Coordinate workflows and delegate to specialists:
 - `blue-feature-specification-analyst` - Requirements & planning
 - `blue-architecture-designer` - Technical design
 - `blue-refactoring-strategy-planner` - Refactoring strategy
+- `blue-extraction-boundary-designer` - Package/module boundary design for extractions
 - `blue-app-quality-gate-keeper` - Quality audits
 - `blue-implementation-review-coordinator` - Review coordination
 
@@ -19,7 +20,7 @@ Coordinate workflows and delegate to specialists:
 Execute specific tasks in their domain:
 
 - **Development** (9 agents) - Build features
-- **Quality** (9 agents) - Ensure code quality
+- **Quality** (11 agents) - Ensure code quality
 - **Infrastructure** (9 agents) - DevOps & tooling
 - **Blockchain** (11 agents) - Smart contracts
 - **Configuration** (1 agent) - Platform setup
@@ -128,35 +129,44 @@ flowchart TD
 
 **Flow:**
 
-1. **@blue-refactoring-strategy-planner**
-   - Analyzes current state
-   - Creates phased plan
-   - Identifies risks
+1. **@blue-codebase-analyst** (recommended for non-trivial scope)
+   - Produces Code Inventory: edge cases, data flow, coupling
 
-2. **Phase 1: Setup**
+2. **@blue-extraction-boundary-designer** (when extracting a package/module)
+   - Produces Boundary Specification: API, adapters, migration map
+
+3. **@blue-refactoring-strategy-planner**
+   - Creates phased plan using the artifacts above
+   - Identifies risks and rollback options
+
+4. **Phase 1: Setup**
    - Preparation work
    - Add abstractions
    - Write tests
 
-3. **@blue-implementation-review-coordinator**
-   - Verify phase 1 complete
+5. **@blue-refactoring-verification-specialist**
+   - Gate: coverage matrix vs. Code Inventory before next phase
+
+6. **@blue-implementation-review-coordinator**
+   - Verify phase complete
    - Check for regressions
 
-4. **Phase 2: Migration**
+7. **Phase 2: Migration**
    - Incremental changes
    - Coexistence period
 
-5. **Verify Phase 2**
-   - Quality checks
+8. **Verify Phase 2**
+   - `@blue-refactoring-verification-specialist` + quality checks
    - Behavior preservation
 
-6. **Phase 3: Cleanup**
+9. **Phase 3: Cleanup**
    - Remove old code
    - Final optimizations
 
-7. **Final Verification**
-   - Complete quality audit
-   - Sign-off
+10. **Final Verification**
+    - `@blue-implementation-review-coordinator`
+    - Full verification matrix
+    - Sign-off
 
 ## Recipe: Library/Pattern Migration (e.g., Jotai → Redux)
 
@@ -172,7 +182,9 @@ Use this recipe for any “replace X with Y” migration (state management, rout
 
 ### Worker sequence (manager-run)
 
-1. **Strategy**
+1. **Analysis + strategy**
+   - `@blue-codebase-analyst` (Code Inventory for complex scope)
+   - `@blue-extraction-boundary-designer` (if extracting shared modules)
    - `@blue-refactoring-strategy-planner`
    - Output: phased plan with verification + rollback after each phase
 

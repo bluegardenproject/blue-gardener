@@ -281,4 +281,4 @@ yarn blue-gardener add
 Learn how to find and install agents
 
 **[Agent Catalog →](/agents/)**  
-Browse all 44 available agents
+Browse all 47 available agents

@@ -79,7 +79,7 @@ Agents collaborate through proven patterns:
 
 - **[Getting Started](https://bluegardenproject.github.io/blue-gardener/guide/getting-started)** - Installation and first steps
 - **[Platforms](https://bluegardenproject.github.io/blue-gardener/guide/platforms)** - Platform-specific details
-- **[Agent Catalog](https://bluegardenproject.github.io/blue-gardener/agents/)** - Browse all 44 agents
+- **[Agent Catalog](https://bluegardenproject.github.io/blue-gardener/agents/)** - Browse all 47 agents
 - **[Orchestration](https://bluegardenproject.github.io/blue-gardener/guide/orchestration)** - How agents work together
 - **[CLI Reference](https://bluegardenproject.github.io/blue-gardener/reference/cli)** - Complete command docs
 
